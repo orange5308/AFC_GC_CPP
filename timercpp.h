@@ -3,6 +3,13 @@
 #include <chrono>
 #include <fstream>
 #include <iomanip>
+#include <windows.h>
+#include <modbus/modbus.h>
+#include <mongocxx/client.hpp>
+#include <mongocxx/instance.hpp>
+#include <mongocxx/uri.hpp>
+#include <mongocxx/pool.hpp>
+#include <mongocxx/cursor.hpp>
 
 SYSTEMTIME currentTime_start_new;
 SYSTEMTIME currentTime_start_d;
@@ -161,10 +168,13 @@ void Timer::setFixedTime_AFG(T1 control_thread, T2 HM_link_thread,
 		for (int x = 0; x < 41; x++) {
 			HM_data[x] = &HM_data_1[x][0];
 		}
-		ModbusData::PCS_delta PCS_delta;
-		int pcs_read_arr_1[PCS_delta.order][80];
-		int *pcs_read_arr[PCS_delta.order];
-		for (int x = 0; x < PCS_delta.order; x++) {
+		std::string PCS_mode = "delta";
+		int point_order;
+		modbus_device["PCS"][PCS_mode].Get("Order", point_order);
+
+		int pcs_read_arr_1[point_order][80];
+		int *pcs_read_arr[point_order];
+		for (int x = 0; x < point_order; x++) {
 			pcs_read_arr[x] = &pcs_read_arr_1[x][0];
 		}
 

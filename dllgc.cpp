@@ -6,6 +6,8 @@
  */
 
 #include "dllgc.h"
+#include "timercpp.h"
+#include "CJsonObject.hpp"
 #include <stdio.h>
 #include <modbus/modbus.h>
 #include <iostream>
@@ -21,14 +23,666 @@
 #include <bsoncxx/json.hpp>
 #include <bsoncxx/types/value.hpp>
 #include <cmath>
-#include "timercpp.h"
 #include <iomanip>
 #include <vector>
 using bsoncxx::builder::basic::kvp;
 using bsoncxx::builder::basic::make_array;
 using bsoncxx::builder::basic::make_document;
 using bsoncxx::builder::basic::sub_array;
+neb::CJsonObject modbus_device("{"
+"\"PCS\":{"
+	"\"delta\":{"
+		"\"Order\":2,"
+		"\"Fc\":[4, 3],"
+		"\"Address\":[0, 0],"
+		"\"Length\":[80, 20],"
+		"\"Bit_Length\":26,"
+		"\"Point\":{"
+			"\"v1_grid\":{"
+				"\"order\":0,"
+				"\"address\":2,"
+				"\"length\":1,"
+				"\"type\":\"int\","
+				"\"scale\":1.0"
+			"},"
+			"\"v2_grid\":{"
+				"\"order\":0,"
+				"\"address\":3,"
+				"\"length\":1,"
+				"\"type\":\"int\","
+				"\"scale\":1.0"
+			"},"
+			"\"v3_grid\":{"
+				"\"order\":0,"
+				"\"address\":4,"
+				"\"length\":1,"
+				"\"type\":\"int\","
+				"\"scale\":1.0"
+			"},"
+			"\"i1_grid\":{"
+				"\"order\":0,"
+				"\"address\":5,"
+				"\"length\":1,"
+				"\"type\":\"int\","
+				"\"scale\":10.0"
+			"},"
+			"\"i2_grid\":{"
+				"\"order\":0,"
+				"\"address\":6,"
+				"\"length\":1,"
+				"\"type\":\"int\","
+				"\"scale\":10.0"
+			"},"
+			"\"i3_grid\":{"
+				"\"order\":0,"
+				"\"address\":7,"
+				"\"length\":1,"
+				"\"type\":\"int\","
+				"\"scale\":10.0"
+			"},"
+			"\"p_grid\":{"
+				"\"order\":0,"
+				"\"address\":8,"
+				"\"length\":1,"
+				"\"type\":\"int\","
+				"\"scale\":10.0"
+			"},"
+			"\"q_grid\":{"
+				"\"order\":0,"
+				"\"address\":9,"
+				"\"length\":1,"
+				"\"type\":\"int\","
+				"\"scale\":10.0"
+			"},"
+			"\"pf_grid\":{"
+				"\"order\":0,"
+				"\"address\":10,"
+				"\"length\":1,"
+				"\"type\":\"int\","
+				"\"scale\":10000.0"
+			"},"
+			"\"f_grid\":{"
+				"\"order\":0,"
+				"\"address\":11,"
+				"\"length\":1,"
+				"\"type\":\"uint\","
+				"\"scale\":100.0"
+			"},"
+			"\"v1_pcs\":{"
+				"\"order\":0,"
+				"\"address\":12,"
+				"\"length\":1,"
+				"\"type\":\"int\","
+				"\"scale\":10.0"
+			"},"
+			"\"v2_pcs\":{"
+				"\"order\":0,"
+				"\"address\":13,"
+				"\"length\":1,"
+				"\"type\":\"int\","
+				"\"scale\":10.0"
+			"},"
+			"\"v3_pcs\":{"
+				"\"order\":0,"
+				"\"address\":14,"
+				"\"length\":1,"
+				"\"type\":\"int\","
+				"\"scale\":10.0"
+			"},"
+			"\"i1_pcs\":{"
+				"\"order\":0,"
+				"\"address\":15,"
+				"\"length\":1,"
+				"\"type\":\"int\","
+				"\"scale\":100.0"
+			"},"
+			"\"i2_pcs\":{"
+				"\"order\":0,"
+				"\"address\":16,"
+				"\"length\":1,"
+				"\"type\":\"int\","
+				"\"scale\":100.0"
+			"},"
+			"\"i3_pcs\":{"
+				"\"order\":0,"
+				"\"address\":17,"
+				"\"length\":1,"
+				"\"type\":\"int\","
+				"\"scale\":100.0"
+			"},"
+			"\"p_sum\":{"
+				"\"order\":0,"
+				"\"address\":18,"
+				"\"length\":1,"
+				"\"type\":\"int\","
+				"\"scale\":10.0"
+			"},"
+			"\"q_sum\":{"
+				"\"order\":0,"
+				"\"address\":19,"
+				"\"length\":1,"
+				"\"type\":\"int\","
+				"\"scale\":10.0"
+			"},"
+			"\"pf\":{"
+				"\"order\":0,"
+				"\"address\":20,"
+				"\"length\":1,"
+				"\"type\":\"int\","
+				"\"scale\":10000.0"
+			"},"
+			"\"f_pcs_low\":{"
+				"\"order\":0,"
+				"\"address\":21,"
+				"\"length\":1,"
+				"\"type\":\"uint\","
+				"\"scale\":100.0"
+			"},"
+			"\"p_dc\":{"
+				"\"order\":0,"
+				"\"address\":26,"
+				"\"length\":1,"
+				"\"type\":\"int\","
+				"\"scale\":10.0"
+			"},"
+			"\"status_pcs_1\":{"
+				"\"order\":0,"
+				"\"address\":52,"
+				"\"length\":1,"
+				"\"type\":\"bit\","
+				"\"scale\":1.0"
+			"},"
+			"\"status_pcs_2\":{"
+				"\"order\":0,"
+				"\"address\":53,"
+				"\"length\":1,"
+				"\"type\":\"bit\","
+				"\"scale\":1.0"
+			"},"
+			"\"status_system\":{"
+				"\"order\":0,"
+				"\"address\":54,"
+				"\"length\":1,"
+				"\"type\":\"bit\","
+				"\"scale\":1.0"
+			"},"
+			"\"mode_pcs\":{"
+				"\"order\":0,"
+				"\"address\":55,"
+				"\"length\":1,"
+				"\"type\":\"bit\","
+				"\"scale\":1.0"
+			"},"
+			"\"module1_fault1\":{"
+				"\"order\":0,"
+				"\"address\":56,"
+				"\"length\":1,"
+				"\"type\":\"bit\","
+				"\"scale\":1.0"
+			"},"
+			"\"module1_fault2\":{"
+				"\"order\":0,"
+				"\"address\":57,"
+				"\"length\":1,"
+				"\"type\":\"bit\","
+				"\"scale\":1.0"
+			"},"
+			"\"module1_fault3\":{"
+				"\"order\":0,"
+				"\"address\":58,"
+				"\"length\":1,"
+				"\"type\":\"bit\","
+				"\"scale\":1.0"
+			"},"
+			"\"module2_fault1\":{"
+				"\"order\":0,"
+				"\"address\":59,"
+				"\"length\":1,"
+				"\"type\":\"bit\","
+				"\"scale\":1.0"
+			"},"
+			"\"module2_fault2\":{"
+				"\"order\":0,"
+				"\"address\":60,"
+				"\"length\":1,"
+				"\"type\":\"bit\","
+				"\"scale\":1.0"
+			"},"
+			"\"module2_fault3\":{"
+				"\"order\":0,"
+				"\"address\":61,"
+				"\"length\":1,"
+				"\"type\":\"bit\","
+				"\"scale\":1.0"
+			"},"
+			"\"module3_fault1\":{"
+				"\"order\":0,"
+				"\"address\":62,"
+				"\"length\":1,"
+				"\"type\":\"bit\","
+				"\"scale\":1.0"
+			"},"
+			"\"module3_fault2\":{"
+				"\"order\":0,"
+				"\"address\":63,"
+				"\"length\":1,"
+				"\"type\":\"bit\","
+				"\"scale\":1.0"
+			"},"
+			"\"module3_fault3\":{"
+				"\"order\":0,"
+				"\"address\":64,"
+				"\"length\":1,"
+				"\"type\":\"bit\","
+				"\"scale\":1.0"
+			"},"
+			"\"module4_fault1\":{"
+				"\"order\":0,"
+				"\"address\":65,"
+				"\"length\":1,"
+				"\"type\":\"bit\","
+				"\"scale\":1.0"
+			"},"
+			"\"module4_fault2\":{"
+				"\"order\":0,"
+				"\"address\":66,"
+				"\"length\":1,"
+				"\"type\":\"bit\","
+				"\"scale\":1.0"
+			"},"
+			"\"module4_fault3\":{"
+				"\"order\":0,"
+				"\"address\":67,"
+				"\"length\":1,"
+				"\"type\":\"bit\","
+				"\"scale\":1.0"
+			"},"
+			"\"system_fault1\":{"
+				"\"order\":0,"
+				"\"address\":68,"
+				"\"length\":1,"
+				"\"type\":\"bit\","
+				"\"scale\":1.0"
+			"},"
+			"\"system_fault2\":{"
+				"\"order\":0,"
+				"\"address\":69,"
+				"\"length\":1,"
+				"\"type\":\"bit\","
+				"\"scale\":1.0"
+			"},"
+			"\"system_fault3\":{"
+				"\"order\":0,"
+				"\"address\":70,"
+				"\"length\":1,"
+				"\"type\":\"bit\","
+				"\"scale\":1.0"
+			"},"
+			"\"cooling_fault\":{"
+				"\"order\":0,"
+				"\"address\":71,"
+				"\"length\":1,"
+				"\"type\":\"bit\","
+				"\"scale\":1.0"
+			"},"
+			"\"fan_fault\":{"
+				"\"order\":0,"
+				"\"address\":72,"
+				"\"length\":1,"
+				"\"type\":\"bit\","
+				"\"scale\":1.0"
+			"},"
+			"\"system_warning\":{"
+				"\"order\":0,"
+				"\"address\":73,"
+				"\"length\":1,"
+				"\"type\":\"bit\","
+				"\"scale\":1.0"
+			"},"
+			"\"control_word1\":{"
+				"\"order\":1,"
+				"\"address\":0,"
+				"\"length\":1,"
+				"\"type\":\"bit\","
+				"\"scale\":1.0"
+			"},"
+			"\"control_word2\":{"
+				"\"order\":1,"
+				"\"address\":1,"
+				"\"length\":1,"
+				"\"type\":\"bit\","
+				"\"scale\":1.0"
+			"},"
+			"\"control_word3\":{"
+				"\"order\":1,"
+				"\"address\":2,"
+				"\"length\":1,"
+				"\"type\":\"bit\","
+				"\"scale\":1.0"
+			"},"
+			"\"rst_word\":{"
+				"\"order\":1,"
+				"\"address\":3,"
+				"\"length\":1,"
+				"\"type\":\"bit\","
+				"\"scale\":1.0"
+			"},"
+			"\"PQ_p_out\":{"
+				"\"order\":1,"
+				"\"address\":10,"
+				"\"length\":1,"
+				"\"type\":\"int\","
+				"\"scale\":10.0"
+			"},"
+			"\"PQ_q_out\":{"
+				"\"order\":1,"
+				"\"address\":11,"
+				"\"length\":1,"
+				"\"type\":\"int\","
+				"\"scale\":10.0"
+			"}"
+		"}"
+	"}"
+"},"
+"\"meter\":{"
+	"\"ION9000\":{"
+		"\"Order\":2,"
+		"\"Fc\":[3, 3],"
+		"\"Address\":[20999, 2699],"
+		"\"Length\":[72, 24],"
+		"\"Point\":{"
+			"\"i_a\":{"
+				"\"order\":0,"
+				"\"address\":20999,"
+				"\"length\":2,"
+				"\"type\":\"float\","
+				"\"scale\":1.0"
+			"},"
+			"\"i_b\":{"
+				"\"order\":0,"
+				"\"address\":21001,"
+				"\"length\":2,"
+				"\"type\":\"float\","
+				"\"scale\":1.0"
+			"},"
+			"\"i_c\":{"
+				"\"order\":0,"
+				"\"address\":21003,"
+				"\"length\":2,"
+				"\"type\":\"float\","
+				"\"scale\":1.0"
+			"},"
+			"\"i\":{"
+				"\"order\":0,"
+				"\"address\":21009,"
+				"\"length\":2,"
+				"\"type\":\"float\","
+				"\"scale\":1.0"
+			"},"
+			"\"f\":{"
+				"\"order\":0,"
+				"\"address\":21015,"
+				"\"length\":2,"
+				"\"type\":\"float\","
+				"\"scale\":1.0"
+			"},"
+			"\"vl_ab\":{"
+				"\"order\":0,"
+				"\"address\":21017,"
+				"\"length\":2,"
+				"\"type\":\"float\","
+				"\"scale\":1.0"
+			"},"
+			"\"vl_bc\":{"
+				"\"order\":0,"
+				"\"address\":21019,"
+				"\"length\":2,"
+				"\"type\":\"float\","
+				"\"scale\":1.0"
+			"},"
+			"\"vl_ca\":{"
+				"\"order\":0,"
+				"\"address\":21021,"
+				"\"length\":2,"
+				"\"type\":\"float\","
+				"\"scale\":1.0"
+			"},"
+			"\"vl\":{"
+				"\"order\":0,"
+				"\"address\":21023,"
+				"\"length\":2,"
+				"\"type\":\"float\","
+				"\"scale\":1.0"
+			"},"
+			"\"v_a\":{"
+				"\"order\":0,"
+				"\"address\":21025,"
+				"\"length\":2,"
+				"\"type\":\"float\","
+				"\"scale\":1.0"
+			"},"
+			"\"v_b\":{"
+				"\"order\":0,"
+				"\"address\":21027,"
+				"\"length\":2,"
+				"\"type\":\"float\","
+				"\"scale\":1.0"
+			"},"
+			"\"v_c\":{"
+				"\"order\":0,"
+				"\"address\":21029,"
+				"\"length\":2,"
+				"\"type\":\"float\","
+				"\"scale\":1.0"
+			"},"
+			"\"v\":{"
+				"\"order\":0,"
+				"\"address\":21033,"
+				"\"length\":2,"
+				"\"type\":\"float\","
+				"\"scale\":1.0"
+			"},"
+			"\"p_a\":{"
+				"\"order\":0,"
+				"\"address\":21039,"
+				"\"length\":2,"
+				"\"type\":\"float\","
+				"\"scale\":1000.0"
+			"},"
+			"\"p_b\":{"
+				"\"order\":0,"
+				"\"address\":21041,"
+				"\"length\":2,"
+				"\"type\":\"float\","
+				"\"scale\":1000.0"
+			"},"
+			"\"p_c\":{"
+				"\"order\":0,"
+				"\"address\":21043,"
+				"\"length\":2,"
+				"\"type\":\"float\","
+				"\"scale\":1000.0"
+			"},"
+			"\"p\":{"
+				"\"order\":0,"
+				"\"address\":21045,"
+				"\"length\":2,"
+				"\"type\":\"float\","
+				"\"scale\":1000.0"
+			"},"
+			"\"q_a\":{"
+				"\"order\":0,"
+				"\"address\":21047,"
+				"\"length\":2,"
+				"\"type\":\"float\","
+				"\"scale\":1000.0"
+			"},"
+			"\"q_b\":{"
+				"\"order\":0,"
+				"\"address\":21049,"
+				"\"length\":2,"
+				"\"type\":\"float\","
+				"\"scale\":1000.0"
+			"},"
+			"\"q_c\":{"
+				"\"order\":0,"
+				"\"address\":21051,"
+				"\"length\":2,"
+				"\"type\":\"float\","
+				"\"scale\":1000.0"
+			"},"
+			"\"q\":{"
+				"\"order\":0,"
+				"\"address\":21053,"
+				"\"length\":2,"
+				"\"type\":\"float\","
+				"\"scale\":1000.0"
+			"},"
+			"\"s_a\":{"
+				"\"order\":0,"
+				"\"address\":21055,"
+				"\"length\":2,"
+				"\"type\":\"float\","
+				"\"scale\":1000.0"
+			"},"
+			"\"s_b\":{"
+				"\"order\":0,"
+				"\"address\":21057,"
+				"\"length\":2,"
+				"\"type\":\"float\","
+				"\"scale\":1000.0"
+			"},"
+			"\"s_c\":{"
+				"\"order\":0,"
+				"\"address\":21059,"
+				"\"length\":2,"
+				"\"type\":\"float\","
+				"\"scale\":1000.0"
+			"},"
+			"\"s\":{"
+				"\"order\":0,"
+				"\"address\":21061,"
+				"\"length\":2,"
+				"\"type\":\"float\","
+				"\"scale\":1000.0"
+			"},"
+			"\"pf_a\":{"
+				"\"order\":0,"
+				"\"address\":21063,"
+				"\"length\":2,"
+				"\"type\":\"float\","
+				"\"scale\":1.0"
+			"},"
+			"\"pf_b\":{"
+				"\"order\":0,"
+				"\"address\":21065,"
+				"\"length\":2,"
+				"\"type\":\"float\","
+				"\"scale\":1.0"
+			"},"
+			"\"pf_c\":{"
+				"\"order\":0,"
+				"\"address\":21067,"
+				"\"length\":2,"
+				"\"type\":\"float\","
+				"\"scale\":1.0"
+			"},"
+			"\"pf\":{"
+				"\"order\":0,"
+				"\"address\":21069,"
+				"\"length\":2,"
+				"\"type\":\"float\","
+				"\"scale\":1.0"
+			"},"
+			"\"imp_kwh\":{"
+				"\"order\":1,"
+				"\"address\":2699,"
+				"\"length\":2,"
+				"\"type\":\"float\","
+				"\"scale\":1.0"
+			"},"
+			"\"exp_kwh\":{"
+				"\"order\":1,"
+				"\"address\":2701,"
+				"\"length\":2,"
+				"\"type\":\"float\","
+				"\"scale\":1.0"
+			"},"
+			"\"tot_kwh\":{"
+				"\"order\":1,"
+				"\"address\":2703,"
+				"\"length\":2,"
+				"\"type\":\"float\","
+				"\"scale\":1.0"
+			"},"
+			"\"net_kwh\":{"
+				"\"order\":1,"
+				"\"address\":2705,"
+				"\"length\":2,"
+				"\"type\":\"float\","
+				"\"scale\":1.0"
+			"},"
+			"\"imp_kvarh\":{"
+				"\"order\":1,"
+				"\"address\":2707,"
+				"\"length\":2,"
+				"\"type\":\"float\","
+				"\"scale\":1.0"
+			"},"
+			"\"exp_kvarh\":{"
+				"\"order\":1,"
+				"\"address\":2709,"
+				"\"length\":2,"
+				"\"type\":\"float\","
+				"\"scale\":1.0"
+			"},"
+			"\"tot_kvarh\":{"
+				"\"order\":1,"
+				"\"address\":2711,"
+				"\"length\":2,"
+				"\"type\":\"float\","
+				"\"scale\":1.0"
+			"},"
+			"\"net_kvarh\":{"
+				"\"order\":1,"
+				"\"address\":2713,"
+				"\"length\":2,"
+				"\"type\":\"float\","
+				"\"scale\":1.0"
+			"},"
+			"\"imp_kvah\":{"
+				"\"order\":1,"
+				"\"address\":2715,"
+				"\"length\":2,"
+				"\"type\":\"float\","
+				"\"scale\":1.0"
+			"},"
+			"\"exp_kvah\":{"
+				"\"order\":1,"
+				"\"address\":2717,"
+				"\"length\":2,"
+				"\"type\":\"float\","
+				"\"scale\":1.0"
+			"},"
+			"\"tot_kvah\":{"
+				"\"order\":1,"
+				"\"address\":2719,"
+				"\"length\":2,"
+				"\"type\":\"float\","
+				"\"scale\":1.0"
+			"},"
+			"\"net_kvah\":{"
+				"\"order\":1,"
+				"\"address\":2721,"
+				"\"length\":2,"
+				"\"type\":\"float\","
+				"\"scale\":1.0"
+			"}"
 
+		"}"
+	"}"
+"}"
+"}");
 dllgc::dllgc() {
 	mongocxx::instance::current();
 }
@@ -108,34 +762,21 @@ double getWin_CpuUsage() {
 	}
 	return cpu;
 }
-void modbus_find(modbus_t *ctx, int *fc, int &ret, bool &read_ok, int **arr,
-		int *read_start, int *read_length, int order) {
-	for (int y = 0; y < order; y++) {
-		if (fc[y] == 3) {
-			uint16_t table_16[read_length[y]];
-
-			ret = modbus_read_registers(ctx, read_start[y], read_length[y],
+void modbus_find(modbus_t *ctx, neb::CJsonObject mode, int &ret, bool &read_ok, int **arr) {
+	int device_order;
+	mode.Get("Order", device_order);
+	std::string point_type;
+	for (int y = 0; y < device_order; y++) {
+		int device_Fc;
+		mode["Fc"].Get(y, device_Fc);
+		int device_Address;
+		mode["Address"].Get(y, device_Address);
+		int device_Length;
+		mode["Length"].Get(y, device_Length);
+		if (device_Fc == 3) {
+			uint16_t table_16[device_Length];
+			ret = modbus_read_registers(ctx, device_Address, device_Length,
 					table_16);
-			if (ret > 0) {
-				for (int x = 0; x < read_length[y]; x++) {
-					arr[y][x] = table_16[x];
-//					printf("reg[%d]=%d (0x%X)\n", x, table_16[x], table_16[x]);
-//					fflush(stdout);
-				}
-				read_ok = true;
-			} else {
-//				std::cout << "read_start[y] :" << read_start[y]
-//						<< " read_length[y] :" << read_length[y] << std::endl;
-//				std::cout << "modbus dont find data" << std::endl;
-
-				read_ok = false;
-			}
-		}
-		if (fc[y] == 4) {
-			uint16_t table_16[read_length[y]];
-
-			ret = modbus_read_input_registers(ctx, read_start[y],
-					read_length[y], table_16);
 			if (ret > 0) {
 				for (int x = 0; x < ret; x++) {
 					arr[y][x] = table_16[x];
@@ -147,6 +788,26 @@ void modbus_find(modbus_t *ctx, int *fc, int &ret, bool &read_ok, int **arr,
 //				std::cout << "read_start[y] :" << read_start[y]
 //						<< " read_length[y] :" << read_length[y] << std::endl;
 //				std::cout << "modbus dont find data" << std::endl;
+//				fflush(stdout);
+				read_ok = false;
+			}
+		}
+		else if (device_Fc == 4) {
+			uint16_t table_16[device_Length];
+			ret = modbus_read_input_registers(ctx, device_Address, device_Length,
+					table_16);
+			if (ret > 0) {
+				for (int x = 0; x < ret; x++) {
+					arr[y][x] = table_16[x];
+//					printf("reg[%d]=%d (0x%X)\n", x, table_16[x], table_16[x]);
+//					fflush(stdout);
+				}
+				read_ok = true;
+			} else {
+//				std::cout << "read_start[y] :" << read_start[y]
+//						<< " read_length[y] :" << read_length[y] << std::endl;
+//				std::cout << "modbus dont find data" << std::endl;
+//				fflush(stdout);
 				read_ok = false;
 			}
 		}
@@ -171,7 +832,6 @@ void dReg_mode(std::string &control_point, char &path_dReg, double &pcs_out_p,
 			pcs_out_p = HM_f * a1 + b1;
 //			std::cout <<"a1 :"<< std::to_string(a1) <<" b1 :" << std::to_string(b1) << " HM_f :" <<std::to_string(HM_f)<< std::endl;
 			control_point = "d1";
-
 		} else if (HM_f > f_arr[1] and HM_f <= f_arr[2]) {
 			if (path_dReg == 'H') {
 				pcs_out_p = HM_f * a21 + b21;
@@ -430,18 +1090,28 @@ void mongo_dic(bsoncxx::v_noabi::document::view doc, std::string point_name,
 		}
 	}
 }
-double Read_upload(auto device, auto point, int **modbus_data) {
+double Read_upload(neb::CJsonObject mode, neb::CJsonObject mode_point, int **modbus_data) {
 	double return_data = 0;
 	try {
-//		std::cout<<modbus_data[point.order][point.length]<<std::endl;
-//		std::cout<<return_data<<std::endl;
-		if (point.type == "int") {
-			for (int x = 0; x < point.length; x++) {
-//				std::cout<<modbus_data[point.order][point.Address+x]<<std::endl;
+		int point_order;
+		mode_point.Get("order", point_order);
+		int point_Address;
+		mode_point.Get("address", point_Address);
+		int point_length;
+		mode_point.Get("length", point_length);
+		std::string point_type;
+		mode_point.Get("type", point_type);
+		double point_scale;
+		mode_point.Get("scale", point_scale);
+		int device_Address;
+		mode["Address"].Get(point_order, device_Address);
+		if (point_type == "int") {
+
+			for (int x = 0; x < point_length; x++) {
 				return_data = ((uint32_t) return_data << 16)
-						+ modbus_data[point.order][point.Address - device.Address[point.order] + x];
+						+ modbus_data[point_order][point_Address - device_Address + x];
 			}
-			if (point.length == 1) {
+			if (point_length == 1) {
 				uint16_t xorbit = 65535; /*256**2 -1*/
 				uint16_t xorbit_test = 32768;/*(256**2)>>1*/
 				if ((uint16_t) return_data
@@ -449,7 +1119,7 @@ double Read_upload(auto device, auto point, int **modbus_data) {
 					return_data = -(((uint16_t) return_data ^ xorbit) + 1);
 				}
 
-			} else if (point.length == 2) {
+			} else if (point_length == 2) {
 				uint32_t xorbit = 4294967295; /*256**^4 -1*/
 				uint32_t xorbit_test = 2147483648;/*(256^4)>>1*/
 				if ((uint32_t) return_data
@@ -457,61 +1127,39 @@ double Read_upload(auto device, auto point, int **modbus_data) {
 					return_data = -(((uint32_t) return_data ^ xorbit) + 1);
 				}
 			}
-		} else if (point.type == "uint") {
-			for (int x = 0; x < point.length; x++) {
-//				std::cout<<modbus_data[point.order][point.Address+x]<<std::endl;
+		} else if (point_type == "uint") {
+			for (int x = 0; x < point_length; x++) {
 				return_data = ((uint32_t) return_data << 16)
-						+ modbus_data[point.order][point.Address - device.Address[point.order] + x];
+						+ modbus_data[point_order][point_Address - device_Address + x];
 			}
-		} else if (point.type == "bit") {/*顯示用*/
-			for (int x = 0; x < point.length; x++) {
-//				std::cout<<modbus_data[point.order][point.Address+x]<<std::endl;
+		} else if (point_type == "bit") {/*顯示用*/
+			for (int x = 0; x < point_length; x++) {
 				return_data = ((uint32_t) return_data << 16)
-						+ modbus_data[point.order][point.Address - device.Address[point.order] + x];
+						+ modbus_data[point_order][point_Address - device_Address + x];
 			}
-		} else if (point.type == "float") {
+		} else if (point_type  == "float") {
 			float temp;
 			char *Modbus_HoldReg[4];
 			Modbus_HoldReg[0] = ((char*) (&temp)) + 3;
 			Modbus_HoldReg[1] = ((char*) (&temp)) + 2;
 			Modbus_HoldReg[2] = ((char*) (&temp)) + 1;
 			Modbus_HoldReg[3] = ((char*) (&temp)) + 0;
-			*Modbus_HoldReg[0] = (modbus_data[point.order][point.Address - device.Address[point.order]] >> 8)
+			*Modbus_HoldReg[0] = (modbus_data[point_order][point_Address - device_Address] >> 8)
 					& 0xff;
-			*Modbus_HoldReg[1] = modbus_data[point.order][point.Address - device.Address[point.order]] & 0xff;
-			*Modbus_HoldReg[2] = (modbus_data[point.order][point.Address - device.Address[point.order] + 1]
+			*Modbus_HoldReg[1] = modbus_data[point_order][point_Address - device_Address] & 0xff;
+			*Modbus_HoldReg[2] = (modbus_data[point_order][point_Address - device_Address + 1]
 					>> 8) & 0xff;
-			*Modbus_HoldReg[3] = modbus_data[point.order][point.Address - device.Address[point.order] + 1]
+			*Modbus_HoldReg[3] = modbus_data[point_order][point_Address - device_Address + 1]
 					& 0xff;
 			return_data = (double) (temp * 10000) / 10000;
-//			std::cout<<"return_data :"<<return_data<<std::endl;
-
 		} else {
 		}
-
-		if (return_data != 0 and point.scale != 0) {
-			return_data = return_data / point.scale;
+		if (return_data != 0 and point_scale != 0) {
+			return_data = return_data / point_scale;
 		}
 	} catch (...) {
 	}
 	return return_data;
-}
-void Read_upload_bit(auto device, auto point, int **modbus_data, int *bin16) {
-	try {
-		if (point.type == "bit") {
-			int return_data = modbus_data[point.order][point.Address - device.Address[point.order]];
-			for (int x = 0; x < 16; x++) {
-				if (return_data != 1) {
-					bin16[x] = return_data % 2;
-					return_data = return_data / 2;
-				} else {
-					bin16[x] = 0;
-				}
-			}
-		} else {
-		}
-	} catch (...) {
-	}
 }
 void HM_link_thread(bool &thread_end, int &thread_count, modbus_t *HM_ctx,
 		int &HM_ret, bool &modbus_link_HM_flag, mongocxx::database db_local,
@@ -534,9 +1182,7 @@ void HM_link_thread(bool &thread_end, int &thread_count, modbus_t *HM_ctx,
 			lock_buffer_1s = int(currentTime_start_new.wSecond);
 			thread_count++;
 			try {
-//				std::cout << "modbus_link run ret: " << HM_ret << std::endl;
 				if (modbus_link_HM_flag == false and HM_ret == -1) {
-//					std::cout << "link_flag == false: " << HM_ret << std::endl;
 					modbus_close(HM_ctx);
 					HM_ret = modbus_connect(HM_ctx);
 				}
@@ -604,11 +1250,6 @@ void error_thread(bool &thread_end, int &thread_count,
 					double memory_data = GetTotalPhysicalMemoryUsed();
 					double memory_per = GetPhysicalMemoryUsage();
 					double cpu = getWin_CpuUsage();
-//					std::cout<<"nowtime :"<<nowtime<<std::endl;
-//					std::cout<<"user name :"<<cUserNameBuffer<<std::endl;
-//					std::cout<<"memory (GB)"<<memory_data<<std::endl;
-//					std::cout<<"memory (%)"<<memory_per<<std::endl;
-//					std::cout<<"CPU (%)"<<cpu<<std::endl;
 					std::vector<bsoncxx::document::value> Status;
 					Status.push_back(
 							make_document(kvp("ID", cUserNameBuffer),
@@ -741,70 +1382,15 @@ void PCS_ReadData_thread(double *pcsdata, int *LEDstate, std::string set_source,
 //			std::cout << "modbus read PCS start" << std::endl;
 			time_t now = time(0);
 			now += 28800;
-			ModbusData::PCS_delta PCS_delta;
-			ModbusData::PCS_delta::v1_grid v1_grid;
-			ModbusData::PCS_delta::v2_grid v2_grid;
-			ModbusData::PCS_delta::v3_grid v3_grid;
-			ModbusData::PCS_delta::i1_grid i1_grid;
-			ModbusData::PCS_delta::i2_grid i2_grid;
-			ModbusData::PCS_delta::i3_grid i3_grid;
-			ModbusData::PCS_delta::p_grid p_grid;
-			ModbusData::PCS_delta::q_grid q_grid;
-			ModbusData::PCS_delta::pf_grid pf_grid;
-			ModbusData::PCS_delta::f_grid f_grid;
-			ModbusData::PCS_delta::v1_pcs v1_pcs;
-			ModbusData::PCS_delta::v2_pcs v2_pcs;
-			ModbusData::PCS_delta::v3_pcs v3_pcs;
-			ModbusData::PCS_delta::i1_pcs i1_pcs;
-			ModbusData::PCS_delta::i2_pcs i2_pcs;
-			ModbusData::PCS_delta::i3_pcs i3_pcs;
-			ModbusData::PCS_delta::p_sum p_sum;
-			ModbusData::PCS_delta::q_sum q_sum;
-			ModbusData::PCS_delta::pf pf;
-			ModbusData::PCS_delta::f_pcs_low f_pcs_low;
-			ModbusData::PCS_delta::p_dc p_dc;
-			ModbusData::PCS_delta::status_pcs_1 status_pcs_1;
-			ModbusData::PCS_delta::status_pcs_2 status_pcs_2;
-			ModbusData::PCS_delta::status_system status_system;
-			ModbusData::PCS_delta::mode_pcs mode_pcs;
-			ModbusData::PCS_delta::module1_fault1 module1_fault1;
-			ModbusData::PCS_delta::module1_fault2 module1_fault2;
-			ModbusData::PCS_delta::module1_fault3 module1_fault3;
-			ModbusData::PCS_delta::module2_fault1 module2_fault1;
-			ModbusData::PCS_delta::module2_fault2 module2_fault2;
-			ModbusData::PCS_delta::module2_fault3 module2_fault3;
-			ModbusData::PCS_delta::module3_fault1 module3_fault1;
-			ModbusData::PCS_delta::module3_fault2 module3_fault2;
-			ModbusData::PCS_delta::module3_fault3 module3_fault3;
-			ModbusData::PCS_delta::module4_fault1 module4_fault1;
-			ModbusData::PCS_delta::module4_fault2 module4_fault2;
-			ModbusData::PCS_delta::module4_fault3 module4_fault3;
-			ModbusData::PCS_delta::system_fault1 system_fault1;
-			ModbusData::PCS_delta::system_fault2 system_fault2;
-			ModbusData::PCS_delta::system_fault3 system_fault3;
-			ModbusData::PCS_delta::cooling_fault cooling_fault;
-			ModbusData::PCS_delta::fan_fault fan_fault;
-			ModbusData::PCS_delta::system_warning system_warning;
-			ModbusData::PCS_delta::control_word1 control_word1;
-			ModbusData::PCS_delta::control_word2 control_word2;
-			ModbusData::PCS_delta::control_word3 control_word3;
-			ModbusData::PCS_delta::rst_word rst_word;
-			ModbusData::PCS_delta::PQ_p_out PQ_p_out;
-			ModbusData::PCS_delta::PQ_q_out PQ_q_out;
-//			std::cout << "pcs_write_ret run ret: "<< pcs_write_ret << std::endl;
+			std::string PCS_mode = "delta";
 			try {
-//				std::cout << "modbus_link_pcs_read_flag run ret: "
-//						<< pcs_read_ret << std::endl;
 				if (modbus_link_pcs_read_flag == false and pcs_read_ret != 0) {
-//					std::cout << "modbus_link_pcs_read_flag == false: "
-//							<< pcs_read_ret << std::endl;
 					modbus_close(pcs_read_ctx);
 					pcs_read_ret = modbus_connect(pcs_read_ctx);
 				}
 				if (pcs_read_ret == -1) {
 					modbus_close(pcs_read_ctx);
 					pcs_read_ret = modbus_connect(pcs_read_ctx);
-//					std::cout << "modbus_close ret: "<< pcs_write_ret << std::endl;
 				}
 
 			} catch (...) {
@@ -815,9 +1401,6 @@ void PCS_ReadData_thread(double *pcsdata, int *LEDstate, std::string set_source,
 			} else if (set_source == "Local") {
 				per_time = pcs_control_time_local;
 			}
-//			std::cout<<"pcs_control_time_local :"<<pcs_control_time_local<<std::endl;
-//			std::cout << "pcs_control_local :" << pcs_control_local << std::endl;
-//			std::cout << "pcs_reset_local :" << pcs_reset_local << std::endl;
 			if (pcs_control_time != per_time) {
 				double control_buffer;
 				double reset_buffer;
@@ -832,13 +1415,8 @@ void PCS_ReadData_thread(double *pcsdata, int *LEDstate, std::string set_source,
 					control_buffer = pcs_control_local;
 					reset_buffer = pcs_reset_local;
 				}
-//				std::cout << "control_buffer :" << control_buffer << std::endl;
-//				std::cout << "reset_buffer :" << reset_buffer << std::endl;
-
 				/*pcs reset*/
 				if (reset_buffer != 0 and pcs_read_ret != -1) {
-//					std::cout << "PCS rrrrresetXXXXXX" << std::endl;
-
 					bool pcs_read_ok = false;
 					uint16_t table_16[1];
 					modbus_read_registers(pcs_read_ctx, 0, 1, table_16);
@@ -847,13 +1425,11 @@ void PCS_ReadData_thread(double *pcsdata, int *LEDstate, std::string set_source,
 					int write_data = (table_16[0]
 							& ((control_bit_1 | control_bit_0)
 									xor 0b1111111111111111)) | control_bit_1;
-//					std::cout << table_16[0] << std::endl;
-//					std::cout << write_data << std::endl;
 					if (modbus_write_register(pcs_read_ctx, 0, write_data)
 							!= -1) {
 						/*p寫入成功*/
 						/*上傳啟動資訊*/
-//						std::cout << "PCS reset" << std::endl;
+//						std::cout << "PCS reset success" << std::endl;
 						std::vector<bsoncxx::document::value> status_docs;
 						time_t now = time(0);
 						now += 28800;
@@ -869,7 +1445,7 @@ void PCS_ReadData_thread(double *pcsdata, int *LEDstate, std::string set_source,
 						db_local["status"].insert_many(status_docs);
 					} else {
 						/*p寫入失敗*/
-//						std::cout << "PCS reset" << std::endl;
+//						std::cout << "PCS reset error" << std::endl;
 						std::vector<bsoncxx::document::value> status_docs;
 						time_t now = time(0);
 						now += 28800;
@@ -890,9 +1466,6 @@ void PCS_ReadData_thread(double *pcsdata, int *LEDstate, std::string set_source,
 				}
 				/*pcs control*/
 				if (control_buffer != 0 and pcs_read_ret != -1) {
-//					std::cout << "PCS ccccccontrolXXXXXX" << std::endl;
-//					std::cout << "control_flag :" << control_flag << std::endl;
-
 					if (control_buffer == 1) {
 						uint16_t table_16[1];
 						modbus_read_registers(pcs_read_ctx, 0, 1, table_16);
@@ -902,11 +1475,8 @@ void PCS_ReadData_thread(double *pcsdata, int *LEDstate, std::string set_source,
 								& ((control_bit_1 | control_bit_0)
 										xor 0b1111111111111111))
 								| control_bit_1;
-//						std::cout << table_16[0] << std::endl;
-//						std::cout << write_data << std::endl;
 						if (modbus_write_register(pcs_read_ctx, 0, write_data)
 								!= -1) {
-
 						}
 					} else if (control_buffer == 2) {
 						uint16_t table_16[1];
@@ -917,51 +1487,26 @@ void PCS_ReadData_thread(double *pcsdata, int *LEDstate, std::string set_source,
 								& ((control_bit_1 | control_bit_0)
 										xor 0b1111111111111111))
 								| control_bit_1;
-//						std::cout << table_16[0] << std::endl;
-//						std::cout << write_data << std::endl;
 						if (modbus_write_register(pcs_read_ctx, 0, write_data)
 								!= -1) {
-
 						}
 					}
 				}
 				pcs_control_time = per_time;
 			}
-			/*上傳PCS資訊*/
-			int status_pcs_1_arr[16];
-			int status_pcs_2_arr[16];
-			int status_system_arr[16];
-			int mode_pcs_arr[16];
-			int module1_fault1_arr[16];
-			int module1_fault2_arr[16];
-			int module1_fault3_arr[16];
-			int module2_fault1_arr[16];
-			int module2_fault2_arr[16];
-			int module2_fault3_arr[16];
-			int module3_fault1_arr[16];
-			int module3_fault2_arr[16];
-			int module3_fault3_arr[16];
-			int module4_fault1_arr[16];
-			int module4_fault2_arr[16];
-			int module4_fault3_arr[16];
-			int system_fault1_arr[16];
-			int system_fault2_arr[16];
-			int system_fault3_arr[16];
-			int cooling_fault_arr[16];
-			int fan_fault_arr[16];
-			int system_warning_arr[16];
-			int control_word1_arr[16];
-			int control_word2_arr[16];
-			int control_word3_arr[16];
-			int rst_word_arr[16];
+			/*大小要看有多少bit*/
+			int device_bit_Length;
+			modbus_device["PCS"][PCS_mode].Get("Bit_Length", device_bit_Length);
+			int pcs_bit_length_1[device_bit_Length][16];
+			int *pcs_bit_length[device_bit_Length];
+			for (int x = 0; x < device_bit_Length; x++) {
+				pcs_bit_length[x] = &pcs_bit_length_1[x][0];
+			}
 			try {
 				if (pcs_read_ret == -1) {
-//					std::cout << "pcs_read_ret change" << std::endl;
 					modbus_link_pcs_read_flag = false;
 				} else {
-
 				}
-//				std::cout<<"pcs_read_ret :"<<pcs_read_ret<<std::endl;
 				bool pcs_read_ok = false;
 				std::vector<bsoncxx::document::value> PCS_docs;
 				if (modbus_link_pcs_read_flag == true
@@ -969,9 +1514,8 @@ void PCS_ReadData_thread(double *pcsdata, int *LEDstate, std::string set_source,
 								and pcs_read_error_count < 3)) {
 					if (modbus_link_pcs_read_flag == true) {
 						pcs_read_error_count = 0;
-						modbus_find(pcs_read_ctx, PCS_delta.fc, pcs_read_ret,
-								pcs_read_ok, pcs_read_arr, PCS_delta.Address,
-								PCS_delta.Length, PCS_delta.order);
+						modbus_find(pcs_read_ctx, modbus_device["PCS"][PCS_mode], pcs_read_ret,
+							pcs_read_ok, pcs_read_arr);
 						if (pcs_read_ok == true) {/*高壓錶讀取成功*/
 							LEDstate[1] = 2;
 						} else {/*高壓錶讀失敗*/
@@ -983,425 +1527,103 @@ void PCS_ReadData_thread(double *pcsdata, int *LEDstate, std::string set_source,
 						LEDstate[1] = 0;
 					}
 					if (pcs_read_ok == true) {/*PCS讀取成功*/
-//						std::cout << "pcs_read_arr:" << pcs_read_arr[0] << std::endl;
-						Read_upload_bit(PCS_delta, status_pcs_1, pcs_read_arr,
-								status_pcs_1_arr);
-						Read_upload_bit(PCS_delta, status_pcs_2, pcs_read_arr,
-								status_pcs_2_arr);
-						Read_upload_bit(PCS_delta, status_system, pcs_read_arr,
-								status_system_arr);
-						Read_upload_bit(PCS_delta, mode_pcs, pcs_read_arr, mode_pcs_arr);
-						Read_upload_bit(PCS_delta, module1_fault1, pcs_read_arr,
-								module1_fault1_arr);
-						Read_upload_bit(PCS_delta, module1_fault2, pcs_read_arr,
-								module1_fault2_arr);
-						Read_upload_bit(PCS_delta, module1_fault3, pcs_read_arr,
-								module1_fault3_arr);
-						Read_upload_bit(PCS_delta, module2_fault1, pcs_read_arr,
-								module2_fault1_arr);
-						Read_upload_bit(PCS_delta, module2_fault2, pcs_read_arr,
-								module2_fault2_arr);
-						Read_upload_bit(PCS_delta, module2_fault3, pcs_read_arr,
-								module2_fault3_arr);
-						Read_upload_bit(PCS_delta, module3_fault1, pcs_read_arr,
-								module3_fault1_arr);
-						Read_upload_bit(PCS_delta, module3_fault2, pcs_read_arr,
-								module3_fault2_arr);
-						Read_upload_bit(PCS_delta, module3_fault3, pcs_read_arr,
-								module3_fault3_arr);
-						Read_upload_bit(PCS_delta, module4_fault1, pcs_read_arr,
-								module4_fault1_arr);
-						Read_upload_bit(PCS_delta, module4_fault2, pcs_read_arr,
-								module4_fault2_arr);
-						Read_upload_bit(PCS_delta, module4_fault3, pcs_read_arr,
-								module4_fault3_arr);
-						Read_upload_bit(PCS_delta, system_fault1, pcs_read_arr,
-								system_fault1_arr);
-						Read_upload_bit(PCS_delta, system_fault2, pcs_read_arr,
-								system_fault2_arr);
-						Read_upload_bit(PCS_delta, system_fault3, pcs_read_arr,
-								system_fault3_arr);
-						Read_upload_bit(PCS_delta, cooling_fault, pcs_read_arr,
-								cooling_fault_arr);
-						Read_upload_bit(PCS_delta, fan_fault, pcs_read_arr, fan_fault_arr);
-						Read_upload_bit(PCS_delta, system_warning, pcs_read_arr,
-								system_warning_arr);
-						Read_upload_bit(PCS_delta, control_word1, pcs_read_arr, control_word1_arr);
-						Read_upload_bit(PCS_delta, control_word2, pcs_read_arr, control_word2_arr);
-						Read_upload_bit(PCS_delta, control_word3, pcs_read_arr, control_word3_arr);
-						Read_upload_bit(PCS_delta, rst_word, pcs_read_arr, rst_word_arr);
-						pcsdata[0] = Read_upload(PCS_delta, v1_grid, pcs_read_arr);
-						pcsdata[1] = Read_upload(PCS_delta, v2_grid, pcs_read_arr);
-						pcsdata[2] = Read_upload(PCS_delta, v3_grid, pcs_read_arr);
-						pcsdata[3] = Read_upload(PCS_delta, i1_grid, pcs_read_arr);
-						pcsdata[4] = Read_upload(PCS_delta, i2_grid, pcs_read_arr);
-						pcsdata[5] = Read_upload(PCS_delta, i3_grid, pcs_read_arr);
-						pcsdata[6] = Read_upload(PCS_delta, p_grid, pcs_read_arr);
-						pcsdata[7] = Read_upload(PCS_delta, q_grid, pcs_read_arr);
-						pcsdata[8] = Read_upload(PCS_delta, pf_grid, pcs_read_arr);
-						pcsdata[9] = Read_upload(PCS_delta, f_grid, pcs_read_arr);
-						pcsdata[10] = Read_upload(PCS_delta, v1_pcs, pcs_read_arr);
-						pcsdata[11] = Read_upload(PCS_delta, v2_pcs, pcs_read_arr);
-						pcsdata[12] = Read_upload(PCS_delta, v3_pcs, pcs_read_arr);
-						pcsdata[13] = Read_upload(PCS_delta, i1_pcs, pcs_read_arr);
-						pcsdata[14] = Read_upload(PCS_delta, i2_pcs, pcs_read_arr);
-						pcsdata[15] = Read_upload(PCS_delta, i3_pcs, pcs_read_arr);
-						pcsdata[16] = Read_upload(PCS_delta, p_sum, pcs_read_arr);
-						pcsdata[17] = Read_upload(PCS_delta, q_sum, pcs_read_arr);
-						pcsdata[18] = Read_upload(PCS_delta, pf, pcs_read_arr);
-						pcsdata[19] = Read_upload(PCS_delta, f_pcs_low, pcs_read_arr);
-						pcsdata[20] = Read_upload(PCS_delta, p_dc, pcs_read_arr);
-						pcsdata[21] = Read_upload(PCS_delta, status_pcs_1, pcs_read_arr);
-						pcsdata[22] = Read_upload(PCS_delta, status_pcs_2, pcs_read_arr);
-						pcsdata[23] = Read_upload(PCS_delta, status_system, pcs_read_arr);
-						pcsdata[24] = Read_upload(PCS_delta, mode_pcs, pcs_read_arr);
-						pcsdata[25] = Read_upload(PCS_delta, module1_fault1, pcs_read_arr);
-						pcsdata[26] = Read_upload(PCS_delta, module1_fault2, pcs_read_arr);
-						pcsdata[27] = Read_upload(PCS_delta, module1_fault3, pcs_read_arr);
-						pcsdata[28] = Read_upload(PCS_delta, module2_fault1, pcs_read_arr);
-						pcsdata[29] = Read_upload(PCS_delta, module2_fault2, pcs_read_arr);
-						pcsdata[30] = Read_upload(PCS_delta, module2_fault3, pcs_read_arr);
-						pcsdata[31] = Read_upload(PCS_delta, module3_fault1, pcs_read_arr);
-						pcsdata[32] = Read_upload(PCS_delta, module3_fault2, pcs_read_arr);
-						pcsdata[33] = Read_upload(PCS_delta, module3_fault3, pcs_read_arr);
-						pcsdata[34] = Read_upload(PCS_delta, module4_fault1, pcs_read_arr);
-						pcsdata[35] = Read_upload(PCS_delta, module4_fault2, pcs_read_arr);
-						pcsdata[36] = Read_upload(PCS_delta, module4_fault3, pcs_read_arr);
-						pcsdata[37] = Read_upload(PCS_delta, system_fault1, pcs_read_arr);
-						pcsdata[38] = Read_upload(PCS_delta, system_fault2, pcs_read_arr);
-						pcsdata[39] = Read_upload(PCS_delta, system_fault3, pcs_read_arr);
-						pcsdata[40] = Read_upload(PCS_delta, cooling_fault, pcs_read_arr);
-						pcsdata[41] = Read_upload(PCS_delta, fan_fault, pcs_read_arr);
-						pcsdata[42] = Read_upload(PCS_delta, system_warning, pcs_read_arr);
-
-						pcsdata[43] = Read_upload(PCS_delta, rst_word, pcs_read_arr);
-						pcsdata[44] = Read_upload(PCS_delta, PQ_p_out, pcs_read_arr);
-						pcsdata[45] = Read_upload(PCS_delta, PQ_q_out, pcs_read_arr);
-						pcsdata[46] = Read_upload(PCS_delta, control_word1, pcs_read_arr);
-						pcsdata[47] = Read_upload(PCS_delta, control_word2, pcs_read_arr);
-						pcsdata[48] = Read_upload(PCS_delta, control_word3, pcs_read_arr);
-//						for (int x = 0 ;x<45 ; x++){
-//							std::cout<<"pcsdata"<<x<<" :"<< pcsdata[x]<<std::endl;
-//						}
-						PCS_docs.push_back(
-								make_document(kvp("ID", PCS_eid),
-										kvp("time",
-												bsoncxx::types::b_date {
-														std::chrono::system_clock::from_time_t(
-																now) }),
-										kvp("v1_grid", pcsdata[0]),
-										kvp("v2_grid", pcsdata[1]),
-										kvp("v3_grid", pcsdata[2]),
-										kvp("i1_grid", pcsdata[3]),
-										kvp("i2_grid", pcsdata[4]),
-										kvp("i3_grid", pcsdata[5]),
-										kvp("p_grid", pcsdata[6]),
-										kvp("q_grid", pcsdata[7]),
-										kvp("pf_grid", pcsdata[8]),
-										kvp("f_grid", pcsdata[9]),
-										kvp("v1_pcs", pcsdata[10]),
-										kvp("v2_pcs", pcsdata[11]),
-										kvp("v3_pcs", pcsdata[12]),
-										kvp("i1_pcs", pcsdata[13]),
-										kvp("i2_pcs", pcsdata[14]),
-										kvp("i3_pcs", pcsdata[15]),
-										kvp("p_sum", pcsdata[16]),
-										kvp("q_sum", pcsdata[17]),
-										kvp("pf", pcsdata[18]),
-										kvp("f_pcs_low", pcsdata[19]),
-										kvp("p_dc", pcsdata[20]),
-										kvp("status_pcs_1",
-												[&status_pcs_1_arr](
-														sub_array child) {
-													for (const int &element : status_pcs_1_arr) {
-														child.append(element);
-													}
-												})
-										,
-										kvp("status_pcs_2",
-												[&status_pcs_2_arr](
-														sub_array child) {
-													for (const int &element : status_pcs_2_arr) {
-														child.append(element);
-													}
-												})
-										,
-										kvp("status_system",
-												[&status_system_arr](
-														sub_array child) {
-													for (const int &element : status_system_arr) {
-														child.append(element);
-													}
-												})
-										,
-										kvp("mode_pcs",
-												[&mode_pcs_arr](
-														sub_array child) {
-													for (const int &element : mode_pcs_arr) {
-														child.append(element);
-													}
-												})
-										,
-										kvp("module1_fault1",
-												[&module1_fault1_arr](
-														sub_array child) {
-													for (const int &element : module1_fault1_arr) {
-														child.append(element);
-													}
-												})
-										,
-										kvp("module1_fault2",
-												[&module1_fault2_arr](
-														sub_array child) {
-													for (const int &element : module1_fault2_arr) {
-														child.append(element);
-													}
-												})
-										,
-										kvp("module1_fault3",
-												[&module1_fault3_arr](
-														sub_array child) {
-													for (const int &element : module1_fault3_arr) {
-														child.append(element);
-													}
-												})
-										,
-										kvp("module2_fault1",
-												[&module2_fault1_arr](
-														sub_array child) {
-													for (const int &element : module2_fault1_arr) {
-														child.append(element);
-													}
-												})
-										,
-										kvp("module2_fault2",
-												[&module2_fault2_arr](
-														sub_array child) {
-													for (const int &element : module2_fault2_arr) {
-														child.append(element);
-													}
-												})
-										,
-										kvp("module2_fault3",
-												[&module2_fault3_arr](
-														sub_array child) {
-													for (const int &element : module2_fault3_arr) {
-														child.append(element);
-													}
-												})
-										,
-										kvp("module3_fault1",
-												[&module3_fault1_arr](
-														sub_array child) {
-													for (const int &element : module3_fault1_arr) {
-														child.append(element);
-													}
-												})
-										,
-										kvp("module3_fault2",
-												[&module3_fault2_arr](
-														sub_array child) {
-													for (const int &element : module3_fault2_arr) {
-														child.append(element);
-													}
-												})
-										,
-										kvp("module3_fault3",
-												[&module3_fault3_arr](
-														sub_array child) {
-													for (const int &element : module3_fault3_arr) {
-														child.append(element);
-													}
-												})
-										,
-										kvp("module4_fault1",
-												[&module4_fault1_arr](
-														sub_array child) {
-													for (const int &element : module4_fault1_arr) {
-														child.append(element);
-													}
-												})
-										,
-										kvp("module4_fault2",
-												[&module4_fault2_arr](
-														sub_array child) {
-													for (const int &element : module4_fault2_arr) {
-														child.append(element);
-													}
-												})
-										,
-										kvp("module4_fault3",
-												[&module4_fault3_arr](
-														sub_array child) {
-													for (const int &element : module4_fault3_arr) {
-														child.append(element);
-													}
-												})
-										,
-										kvp("system_fault1",
-												[&system_fault1_arr](
-														sub_array child) {
-													for (const int &element : system_fault1_arr) {
-														child.append(element);
-													}
-												})
-										,
-										kvp("system_fault2",
-												[&system_fault2_arr](
-														sub_array child) {
-													for (const int &element : system_fault2_arr) {
-														child.append(element);
-													}
-												})
-										,
-										kvp("system_fault3",
-												[&system_fault3_arr](
-														sub_array child) {
-													for (const int &element : system_fault3_arr) {
-														child.append(element);
-													}
-												})
-										,
-										kvp("cooling_fault",
-												[&cooling_fault_arr](
-														sub_array child) {
-													for (const int &element : cooling_fault_arr) {
-														child.append(element);
-													}
-												})
-										,
-										kvp("fan_fault",
-												[&fan_fault_arr](
-														sub_array child) {
-													for (const int &element : fan_fault_arr) {
-														child.append(element);
-													}
-												})
-										,
-										kvp("system_warning",
-												[&system_warning_arr](
-														sub_array child) {
-													for (const int &element : system_warning_arr) {
-														child.append(element);
-													}
-												})
-										,
-										kvp("control_word1",
-												[&control_word1_arr](
-														sub_array child) {
-													for (const int &element : control_word1_arr) {
-														child.append(element);
-													}
-												}) ,
-										kvp("control_word2",
-												[&control_word2_arr](
-														sub_array child) {
-													for (const int &element : control_word2_arr) {
-														child.append(element);
-													}
-												}) ,
-										kvp("control_word3",
-												[&control_word3_arr](
-														sub_array child) {
-													for (const int &element : control_word3_arr) {
-														child.append(element);
-													}
-												}) ,
-										kvp("rst_word",
-												[&rst_word_arr](
-														sub_array child) {
-													for (const int &element : rst_word_arr) {
-														child.append(element);
-													}
-												}) ,
-										kvp("PQ_p_out", pcsdata[44]),
-										kvp("PQ_q_out", pcsdata[45])));
+						/*正常上傳data*/
+						std::string keya;
+						int count_point = 0;
+						/*上傳資料整理*/
+						bsoncxx::builder::basic::document doc_one;
+						doc_one.append(kvp("ID", PCS_eid));
+						doc_one.append(kvp("time", bsoncxx::types::b_date {
+									std::chrono::system_clock::from_time_t(
+											now)
+						}));
+						count_point = 0;
+						while (modbus_device["PCS"][PCS_mode]["Point"].GetKey(keya)){
+							pcsdata[count_point] = Read_upload(modbus_device["PCS"][PCS_mode], modbus_device["PCS"][PCS_mode]["Point"][keya], pcs_read_arr);
+							if (modbus_device["PCS"][PCS_mode]["Point"][keya]("type") == "bit"){
+								int bin16[16];
+								int point_order;
+								modbus_device["PCS"][PCS_mode]["Point"][keya].Get("order", point_order);
+								int point_address;
+								modbus_device["PCS"][PCS_mode]["Point"][keya].Get("address", point_address);
+								int device_Address;
+								modbus_device["PCS"][PCS_mode]["Address"].Get(point_order, device_Address);
+								int return_data = pcs_read_arr[point_order][point_address - device_Address];
+								for (int x = 0; x < 16; x++) {
+									if (return_data != 1) {
+										bin16[x] = return_data % 2;
+										return_data = return_data / 2;
+									} else {
+										bin16[x] = 0;
+									}
+								}
+								doc_one.append(kvp(keya, [&bin16](
+										sub_array child) {
+										for (const int &element : bin16) {
+											child.append(element);
+										}
+									}));
+							}else{
+								doc_one.append(kvp(keya, pcsdata[count_point]));
+							}
+							count_point++;
+						}
+						PCS_docs.push_back(doc_one.extract());
+					}
+					else{
+						/*null上傳data*/
+						std::string keya;
+						int count_point = 0;
+						/*上傳資料整理*/
+						bsoncxx::builder::basic::document doc_one;
+						doc_one.append(kvp("ID", PCS_eid));
+						doc_one.append(kvp("time", bsoncxx::types::b_date {
+									std::chrono::system_clock::from_time_t(
+											now)
+						}));
+						while (modbus_device["PCS"][PCS_mode]["Point"].GetKey(keya)){
+							if (modbus_device["PCS"][PCS_mode]["Point"][keya]("type") == "bit"){
+								int bin16[16];
+								doc_one.append(kvp(keya, [&bin16](
+									sub_array child) {
+									for (const int &element : bin16) {
+										child.append(bsoncxx::types::b_null {});
+									}
+								}));
+							}else{
+								doc_one.append(kvp(keya, bsoncxx::types::b_null {}));
+							}
+						}
 					}
 				} else {
 					LEDstate[1] = 0;
-//					std::cout << "modbus pcs dont find >>>3"<< std::endl;
 					pcs_read_error_count++;
 					for (int x = 0; x < 48; x++) {
 						pcsdata[x] = -1;
 					}
-					PCS_docs.push_back(
-							make_document(kvp("ID", PCS_eid),
-									kvp("time",
-											bsoncxx::types::b_date {
-													std::chrono::system_clock::from_time_t(
-															now) }),
-									kvp("v1_grid", bsoncxx::types::b_null { }),
-									kvp("v2_grid", bsoncxx::types::b_null { }),
-									kvp("v3_grid", bsoncxx::types::b_null { }),
-									kvp("i1_grid", bsoncxx::types::b_null { }),
-									kvp("i2_grid", bsoncxx::types::b_null { }),
-									kvp("i3_grid", bsoncxx::types::b_null { }),
-									kvp("p_grid", bsoncxx::types::b_null { }),
-									kvp("q_grid", bsoncxx::types::b_null { }),
-									kvp("pf_grid", bsoncxx::types::b_null { }),
-									kvp("f_grid", bsoncxx::types::b_null { }),
-									kvp("v1_pcs", bsoncxx::types::b_null { }),
-									kvp("v2_pcs", bsoncxx::types::b_null { }),
-									kvp("v3_pcs", bsoncxx::types::b_null { }),
-									kvp("i1_pcs", bsoncxx::types::b_null { }),
-									kvp("i2_pcs", bsoncxx::types::b_null { }),
-									kvp("i3_pcs", bsoncxx::types::b_null { }),
-									kvp("p_sum", bsoncxx::types::b_null { }),
-									kvp("q_sum", bsoncxx::types::b_null { }),
-									kvp("pf", bsoncxx::types::b_null { }),
-									kvp("f_pcs_low",
-											bsoncxx::types::b_null { }),
-									kvp("p_dc", bsoncxx::types::b_null { }),
-									kvp("status_pcs_1",
-											bsoncxx::types::b_null { }),
-									kvp("status_pcs_2",
-											bsoncxx::types::b_null { }),
-									kvp("status_system",
-											bsoncxx::types::b_null { }),
-									kvp("mode_pcs", bsoncxx::types::b_null { }),
-									kvp("module1_fault1",
-											bsoncxx::types::b_null { }),
-									kvp("module1_fault2",
-											bsoncxx::types::b_null { }),
-									kvp("module1_fault3",
-											bsoncxx::types::b_null { }),
-									kvp("module2_fault1",
-											bsoncxx::types::b_null { }),
-									kvp("module2_fault2",
-											bsoncxx::types::b_null { }),
-									kvp("module2_fault3",
-											bsoncxx::types::b_null { }),
-									kvp("module3_fault1",
-											bsoncxx::types::b_null { }),
-									kvp("module3_fault2",
-											bsoncxx::types::b_null { }),
-									kvp("module3_fault3",
-											bsoncxx::types::b_null { }),
-									kvp("module4_fault1",
-											bsoncxx::types::b_null { }),
-									kvp("module4_fault2",
-											bsoncxx::types::b_null { }),
-									kvp("module4_fault3",
-											bsoncxx::types::b_null { }),
-									kvp("system_fault1",
-											bsoncxx::types::b_null { }),
-									kvp("system_fault2",
-											bsoncxx::types::b_null { }),
-									kvp("system_fault3",
-											bsoncxx::types::b_null { }),
-									kvp("cooling_fault",
-											bsoncxx::types::b_null { }),
-									kvp("fan_fault",
-											bsoncxx::types::b_null { }),
-									kvp("system_warning",
-											bsoncxx::types::b_null { }),
-									kvp("control_word1", bsoncxx::types::b_null { }),
-									kvp("control_word2", bsoncxx::types::b_null { }),
-									kvp("control_word3", bsoncxx::types::b_null { }),
-									kvp("rst_word", bsoncxx::types::b_null { }),
-									kvp("PQ_p_out", bsoncxx::types::b_null { }),
-									kvp("PQ_q_out",
-											bsoncxx::types::b_null { })));
+					/*null上傳data*/
+					std::string keya;
+					int count_point = 0;
+					/*上傳資料整理*/
+					bsoncxx::builder::basic::document doc_one;
+					doc_one.append(kvp("ID", PCS_eid));
+					doc_one.append(kvp("time", bsoncxx::types::b_date {
+								std::chrono::system_clock::from_time_t(
+										now)
+					}));
+					while (modbus_device["PCS"][PCS_mode]["Point"].GetKey(keya)){
+						if (modbus_device["PCS"][PCS_mode]["Point"][keya]("type") == "bit"){
+							int bin16[16];
+							doc_one.append(kvp(keya, [&bin16](
+								sub_array child) {
+								for (const int &element : bin16) {
+									child.append(bsoncxx::types::b_null {});
+								}
+							}));
+						}else{
+							doc_one.append(kvp(keya, bsoncxx::types::b_null {}));
+						}
+					}
 				}
 				try {
 					db["pcs"].insert_many(PCS_docs);
@@ -1415,9 +1637,6 @@ void PCS_ReadData_thread(double *pcsdata, int *LEDstate, std::string set_source,
 					modbus_link_pcs_read_flag = true;
 				} else {
 				}
-//				std::cout << "main run  " << "ret :" << pcs_read_ret
-//						<< " link_flag :" << modbus_link_pcs_read_flag
-//						<< std::endl;
 			} catch (...) {
 			}
 
@@ -1511,7 +1730,6 @@ void EMS_ReadData_thread(bool &thread_end, int &thread_count, double *emsdata,
 								mongo_data(doc, "p4_line_set", p_arrc[3]);
 								mongo_data(doc, "p5_line_set", p_arrc[4]);
 								mongo_data(doc, "p6_line_set", p_arrc[5]);
-//								std::cout <<"p1_line_set :"<< p_arrc[0] << std::endl;
 								mongo_data(doc, "FP_line_p_base",
 										FP_line_p_base);
 								mongo_data(doc, "FP_soc_dead_band",
@@ -1692,10 +1910,9 @@ void EMS_ReadData_thread(bool &thread_end, int &thread_count, double *emsdata,
 						mongocxx::collection coll_pcs = db["pcs_control"];
 						mongocxx::cursor cursor_pcs = coll_pcs.find(
 								make_document(kvp("ID", PCS_id)), opts);
-//					std::cout<< "mongo data find"<<std::endl;
 						for (bsoncxx::v_noabi::document::view doc : cursor_pcs) {
+							std::cout<< bsoncxx::to_json(doc)<<std::endl;
 							try {
-//							std::cout<< bsoncxx::to_json(doc)<<std::endl;
 								mongo_time(doc, "time",
 										pcs_control_time_remote);
 								mongo_data(doc, "control", pcs_control);
@@ -1714,16 +1931,15 @@ void EMS_ReadData_thread(bool &thread_end, int &thread_count, double *emsdata,
 					mongocxx::cursor cursor_mbms = coll_mbms.find(
 							make_document(kvp("ID", MBMS_id)), opts);
 					for (bsoncxx::v_noabi::document::view doc : cursor_mbms) {
+//						std::cout<< bsoncxx::to_json(doc)<<std::endl;
 						try {
-//							std::cout<< bsoncxx::to_json(doc)<<std::endl;
 							double mbms_time_next;
 							mongo_data(doc, "soc_sys", soc);
 							mongo_time(doc, "time", mbms_time_next);
-							//					std::cout<< "mbms_time_next :"<<std::to_string(mbms_time_next)<<std::endl;
 							if (mbms_time != mbms_time_next) {
 								mbms_time = mbms_time_next;
 								mbms_count = 0;
-//								std::cout <<"mbms_time !! :"<<std::to_string(mbms_time)<< std::endl;
+//								std::cout <<"mbms_time != :"<<std::to_string(mbms_time)<< std::endl;
 							} else {
 								mbms_count++;
 //								std::cout <<"mbms_time == :"<<std::to_string(mbms_time)<< std::endl;
@@ -1799,59 +2015,14 @@ void control_thread(bool &function_run, int &thread_count,
 		if (function_run == false) { /*是否已有線呈進入*/
 			function_run = true;
 //			std::cout <<"control_thread runing"<< std::endl;
-
 			/*1*/
 			int xorbit = 65535; /*256的2次方 - 1*/
-			/*2*//*
-			 int xorbit=4294967295; *//*256的4次方 - 1*/
+			/*2
+			int xorbit=4294967295; *//*256的4次方 - 1*/
 
 			time_t now = time(0);
 			now += 28800;
-			ModbusData::Meter_ION9000 Meter_ION9000;
-			ModbusData::Meter_ION9000::i_a i_a;
-			ModbusData::Meter_ION9000::i_b i_b;
-			ModbusData::Meter_ION9000::i_c i_c;
-			ModbusData::Meter_ION9000::i i;
-			ModbusData::Meter_ION9000::f f;
-			ModbusData::Meter_ION9000::vl_ab vl_ab;
-			ModbusData::Meter_ION9000::vl_bc vl_bc;
-			ModbusData::Meter_ION9000::vl_ca vl_ca;
-			ModbusData::Meter_ION9000::vl vl;
-			ModbusData::Meter_ION9000::v_a v_a;
-			ModbusData::Meter_ION9000::v_b v_b;
-			ModbusData::Meter_ION9000::v_c v_c;
-			ModbusData::Meter_ION9000::v v;
-			ModbusData::Meter_ION9000::p_a p_a;
-			ModbusData::Meter_ION9000::p_b p_b;
-			ModbusData::Meter_ION9000::p_c p_c;
-			ModbusData::Meter_ION9000::p p;
-			ModbusData::Meter_ION9000::q_a q_a;
-			ModbusData::Meter_ION9000::q_b q_b;
-			ModbusData::Meter_ION9000::q_c q_c;
-			ModbusData::Meter_ION9000::q q;
-			ModbusData::Meter_ION9000::s_a s_a;
-			ModbusData::Meter_ION9000::s_b s_b;
-			ModbusData::Meter_ION9000::s_c s_c;
-			ModbusData::Meter_ION9000::s s;
-			ModbusData::Meter_ION9000::pf_a pf_a;
-			ModbusData::Meter_ION9000::pf_b pf_b;
-			ModbusData::Meter_ION9000::pf_c pf_c;
-			ModbusData::Meter_ION9000::pf pf;
-			ModbusData::Meter_ION9000::imp_kwh imp_kwh;
-			ModbusData::Meter_ION9000::exp_kwh exp_kwh;
-			ModbusData::Meter_ION9000::tot_kwh tot_kwh;
-			ModbusData::Meter_ION9000::net_kwh net_kwh;
-			ModbusData::Meter_ION9000::imp_kvarh imp_kvarh;
-			ModbusData::Meter_ION9000::exp_kvarh exp_kvarh;
-			ModbusData::Meter_ION9000::tot_kvarh tot_kvarh;
-			ModbusData::Meter_ION9000::net_kvarh net_kvarh;
-			ModbusData::Meter_ION9000::imp_kvah imp_kvah;
-			ModbusData::Meter_ION9000::exp_kvah exp_kvah;
-			ModbusData::Meter_ION9000::tot_kvah tot_kvah;
-			ModbusData::Meter_ION9000::net_kvah net_kvah;
-
-//			long usage = memChecker::get_maxMem_kb() ;
-//			std::cout<<usage<<std::endl ;
+			std::string Meter_mode = "ION9000";
 			/*modbus 讀取高壓表*/
 //			std::cout << "modbus read HM start" << std::endl;
 			try {
@@ -1859,88 +2030,33 @@ void control_thread(bool &function_run, int &thread_count,
 //					std::cout << "HM_ret change" << std::endl;
 					modbus_link_HM_flag = false;
 				}
-//				std::cout<<"HM_ret :"<<HM_ret<<std::endl;
 				bool HM_read_ok = false;
-				int order_len = Meter_ION9000.order;
+				int order_len;
+				modbus_device["meter"][Meter_mode].Get("Order", order_len);
 				int HM_arr_1[order_len][80];
 				int *HM_arr[order_len];
 				for (int x = 0; x < order_len; x++) {
 					HM_arr[x] = &HM_arr_1[x][0];
 				}
-
 				HM_time[lock_buffer_100ms] = now;
 				if (modbus_link_HM_flag == true) {
-					modbus_find(HM_ctx, Meter_ION9000.fc, HM_ret, HM_read_ok,
-							HM_arr, Meter_ION9000.Address, Meter_ION9000.Length,
-							Meter_ION9000.order);
-//					std::cout << HM_time[lock_buffer_100ms] << std::endl;
+					modbus_find(HM_ctx, modbus_device["meter"][Meter_mode], HM_ret, HM_read_ok,
+							HM_arr);
 					if (HM_read_ok == true) {/*高壓錶讀取成功*/
 						HM_error_count = 0;
 						LEDstate[3] = 2;
-//						std::cout <<"HM_arr:" << HM_arr[0][0] << std::endl;
 					} else {/*高壓錶讀失敗*/
-//						std::cout << "modbus HM dont find HM_ret : " << HM_ret
-//								<< " HM_error_count : " << HM_error_count
-//								<< std::endl;
 						HM_error_count++;
 						LEDstate[3] = 0;
 					}
-					HM_data[0][lock_buffer_100ms] = Read_upload(Meter_ION9000, i_a, HM_arr);
-					HM_data[1][lock_buffer_100ms] = Read_upload(Meter_ION9000, i_b, HM_arr);
-					HM_data[2][lock_buffer_100ms] = Read_upload(Meter_ION9000, i_c, HM_arr);
-					HM_data[3][lock_buffer_100ms] = Read_upload(Meter_ION9000, i, HM_arr);
-					HM_data[4][lock_buffer_100ms] = Read_upload(Meter_ION9000, f, HM_arr);
-					HM_data[5][lock_buffer_100ms] = Read_upload(Meter_ION9000, vl_ab, HM_arr);
-					HM_data[6][lock_buffer_100ms] = Read_upload(Meter_ION9000, vl_bc, HM_arr);
-					HM_data[7][lock_buffer_100ms] = Read_upload(Meter_ION9000, vl_ca, HM_arr);
-					HM_data[8][lock_buffer_100ms] = Read_upload(Meter_ION9000, vl, HM_arr);
-					HM_data[9][lock_buffer_100ms] = Read_upload(Meter_ION9000, v_a, HM_arr);
-					HM_data[10][lock_buffer_100ms] = Read_upload(Meter_ION9000, v_b, HM_arr);
-					HM_data[11][lock_buffer_100ms] = Read_upload(Meter_ION9000, v_c, HM_arr);
-					HM_data[12][lock_buffer_100ms] = Read_upload(Meter_ION9000, v, HM_arr);
-					HM_data[13][lock_buffer_100ms] = Read_upload(Meter_ION9000, p_a, HM_arr);
-					HM_data[14][lock_buffer_100ms] = Read_upload(Meter_ION9000, p_b, HM_arr);
-					HM_data[15][lock_buffer_100ms] = Read_upload(Meter_ION9000, p_c, HM_arr);
-					HM_data[16][lock_buffer_100ms] = Read_upload(Meter_ION9000, p, HM_arr);
-					HM_data[17][lock_buffer_100ms] = Read_upload(Meter_ION9000, q_a, HM_arr);
-					HM_data[18][lock_buffer_100ms] = Read_upload(Meter_ION9000, q_b, HM_arr);
-					HM_data[19][lock_buffer_100ms] = Read_upload(Meter_ION9000, q_c, HM_arr);
-					HM_data[20][lock_buffer_100ms] = Read_upload(Meter_ION9000, q, HM_arr);
-					HM_data[21][lock_buffer_100ms] = Read_upload(Meter_ION9000, s_a, HM_arr);
-					HM_data[22][lock_buffer_100ms] = Read_upload(Meter_ION9000, s_b, HM_arr);
-					HM_data[23][lock_buffer_100ms] = Read_upload(Meter_ION9000, s_c, HM_arr);
-					HM_data[24][lock_buffer_100ms] = Read_upload(Meter_ION9000, s, HM_arr);
-					HM_data[25][lock_buffer_100ms] = Read_upload(Meter_ION9000, pf_a, HM_arr);
-					HM_data[26][lock_buffer_100ms] = Read_upload(Meter_ION9000, pf_b, HM_arr);
-					HM_data[27][lock_buffer_100ms] = Read_upload(Meter_ION9000, pf_c, HM_arr);
-					HM_data[28][lock_buffer_100ms] = Read_upload(Meter_ION9000, pf, HM_arr);
-					HM_data[29][lock_buffer_100ms] = Read_upload(Meter_ION9000, imp_kwh,
-							HM_arr);
-					HM_data[30][lock_buffer_100ms] = Read_upload(Meter_ION9000, exp_kwh,
-							HM_arr);
-					HM_data[31][lock_buffer_100ms] = Read_upload(Meter_ION9000, tot_kwh,
-							HM_arr);
-					HM_data[32][lock_buffer_100ms] = Read_upload(Meter_ION9000, net_kwh,
-							HM_arr);
-					HM_data[33][lock_buffer_100ms] = Read_upload(Meter_ION9000, imp_kvarh,
-							HM_arr);
-					HM_data[34][lock_buffer_100ms] = Read_upload(Meter_ION9000, exp_kvarh,
-							HM_arr);
-					HM_data[35][lock_buffer_100ms] = Read_upload(Meter_ION9000, tot_kvarh,
-							HM_arr);
-					HM_data[36][lock_buffer_100ms] = Read_upload(Meter_ION9000, net_kvarh,
-							HM_arr);
-					HM_data[37][lock_buffer_100ms] = Read_upload(Meter_ION9000, imp_kvah,
-							HM_arr);
-					HM_data[38][lock_buffer_100ms] = Read_upload(Meter_ION9000, exp_kvah,
-							HM_arr);
-					HM_data[39][lock_buffer_100ms] = Read_upload(Meter_ION9000, tot_kvah,
-							HM_arr);
-					HM_data[40][lock_buffer_100ms] = Read_upload(Meter_ION9000, net_kvah,
-							HM_arr);
-
+					/*資料更新*/
+					std::string keya;
+					int count_point = 0;
+					while (modbus_device["meter"][Meter_mode]["Point"].GetKey(keya)){
+						HM_data[count_point][lock_buffer_100ms] = Read_upload(modbus_device["meter"][Meter_mode], modbus_device["meter"][Meter_mode]["Point"][keya], HM_arr);
+						count_point++;
+					}
 				} else if (modbus_link_HM_flag == false) {/*無法連線等待另一個 線呈連線成功*/
-//					std::cout << "HM dont link wait" << std::endl;
 					if (HM_ret == 0) {/*連線成功*/
 						modbus_link_HM_flag = true;
 						LEDstate[3] = 2;
@@ -1950,11 +2066,10 @@ void control_thread(bool &function_run, int &thread_count,
 					}
 				}
 				if (HM_read_ok == true) {/*高壓錶讀取成功*/
-					HM_f = Read_upload(Meter_ION9000, f, HM_arr);
-					HM_p = Read_upload(Meter_ION9000, p, HM_arr);
-					HM_v = Read_upload(Meter_ION9000, v, HM_arr);
-					HM_q = Read_upload(Meter_ION9000, q, HM_arr);
-//					std::cout <<"data HM_read_ok end"<< std::endl;
+					HM_f = Read_upload(modbus_device["meter"][Meter_mode], modbus_device["meter"][Meter_mode]["Point"]["f"], HM_arr);
+					HM_p = Read_upload(modbus_device["meter"][Meter_mode], modbus_device["meter"][Meter_mode]["Point"]["p"], HM_arr);
+					HM_v = Read_upload(modbus_device["meter"][Meter_mode], modbus_device["meter"][Meter_mode]["Point"]["v"], HM_arr);
+					HM_q = Read_upload(modbus_device["meter"][Meter_mode], modbus_device["meter"][Meter_mode]["Point"]["q"], HM_arr);
 					/*回傳ui*/
 					for (int x = 0; x < 41; x++) {
 						HMdata[x] = HM_data[x][lock_buffer_100ms];
@@ -1990,16 +2105,8 @@ void control_thread(bool &function_run, int &thread_count,
 					HM_v = -1;
 					HM_q = -1;
 				}
-//				for (int x = 0; x < Meter_ION9000.order; x++)
-//					delete[] HM_arr[x];
-//				delete[] HM_arr;
-//				std::cout << "main run  " << "HM_ret :" << HM_ret
-//						<< " modbus_link_HM_flag :" << modbus_link_HM_flag
-//						<< std::endl;
 			} catch (...) {
 			}
-
-//			std::cout << "read HM　end"<< std::endl;
 			double pcs_out_p_now;/*此次P 0.1s*/
 			double pcs_out_q_now;/*此次Q 0.1s*/
 			if (next_sec == true) { /*換秒*/
@@ -2097,29 +2204,17 @@ void control_thread(bool &function_run, int &thread_count,
 						}
 					}
 					HM_data[4][lock_buffer_100ms] = HM_f;
-//					std::cout << "ability_test!=None :" << ability_test << " HM_f :" << HM_f<< " ability_test_count :" << ability_test_count << std::endl;
 					ability_test_count++;
 				} else {
 					ability_test_count = 0;
 				}
 				/*HM有讀到值*/
 				/*沒讀到值30次 (又不是第一次)*/
-//				std::cout << "next_sec == true"<< std::endl;
-//				std::cout << "first_run :" << first_run << std::endl;
-//				std::cout << "ems_count :" << ems_count <<" mbms_count :" << mbms_count << std::endl;
 				if ((HM_ret > 0
 						or (HM_ret < 0 and HM_error_count < 30
 								and first_run == false))
 						and (ems_count < 60 and mbms_count < 60)) { /*3秒內讀不到還是會進*/
-//					std::cout << "read High meter OK"<< std::endl;
-//					std::cout << "HM_f :" << HM_f << " HM_p :" << HM_p
-//							<< " HM_v :" << HM_v << " HM_q :" << HM_q
-//							<< std::endl;
 					/*模式控制*/
-//					std::cout << "mode :" << mode << "  FP_type :" << FP_type
-//							<< "  VC_type :" << VC_type << std::endl;
-//					std::cout << "soc :" << soc << "  f_arr :" << f_arr[0]
-//								<< "  p_arr :" << p_arr[0] << std::endl;
 					double a1 = control_ab_data[0];
 					double a21 = control_ab_data[1];
 					double a22 = control_ab_data[2];
@@ -2227,10 +2322,6 @@ void control_thread(bool &function_run, int &thread_count,
 				pcs_out_q_now = pcs_out_q;
 				next_sec = false;
 			} else { /*沒換秒 修正讀取值和前一次控制值差值(損失補償)*/
-//				std::cout << "pcs_out_pre_p :" << std::to_string(pcs_out_pre_p)<< std::endl;
-//				std::cout << "pcs_out_p :" << std::to_string(pcs_out_p)<< std::endl;
-//				std::cout << "HM_p :" << std::to_string(HM_p)<< std::endl;
-
 				if (mode == 5 or mode == 11) {
 					pcs_out_p_now = pcs_out_pre_p + (pcs_out_p - HM_p);
 					pcs_out_q_now = pcs_out_pre_q + (pcs_out_q - HM_q);
@@ -2283,8 +2374,6 @@ void control_thread(bool &function_run, int &thread_count,
 //						pcs_len_p, pcs_write_arr_p) != -1) {
 				if (modbus_write_register(pcs_read_ctx, pcs_start_p,
 						pcs_write_arr_p[0]) == 1) {
-//				if (modbus_write_register(pcs_write_ctx, 10, 100) == 1) {
-
 					/*p寫入成功*/
 //					std::cout<<"OKKKKKKK"<<std::endl;
 					pcs_out_pre_p = pcs_out_p_now;/*有寫入成功才能代表有輸出*/
@@ -2312,155 +2401,57 @@ void control_thread(bool &function_run, int &thread_count,
 				std::vector<bsoncxx::document::value> HM_docs;
 				std::vector<bsoncxx::document::value> HM_docs_one;
 				double HM_time_array[10];
-				double HM_v_a_array[10];
-				double HM_v_b_array[10];
-				double HM_v_c_array[10];
-				double HM_i_a_array[10];
-				double HM_i_b_array[10];
-				double HM_i_c_array[10];
-				double HM_f_array[10];
-				double HM_p_array[10];
-				double HM_q_array[10];
-				double HM_pf_array[10];
+				double HM_TPC_array[10][10];
+				std::string point_name[10] = {"v_a","v_b","v_c","i_a","i_b",
+				"i_c","f","p","q","pf"};
 				for (int y = 0; y < 10; y++) {
 					HM_time_array[y] = HM_time[y];
-					HM_v_a_array[y] = HM_data[9][y];
-					HM_v_b_array[y] = HM_data[10][y];
-					HM_v_c_array[y] = HM_data[11][y];
-					HM_i_a_array[y] = HM_data[0][y];
-					HM_i_b_array[y] = HM_data[1][y];
-					HM_i_c_array[y] = HM_data[2][y];
+					HM_TPC_array[0][y] = HM_data[9][y];/*v_a*/
+					HM_TPC_array[1][y] = HM_data[10][y];/*v_b*/
+					HM_TPC_array[2][y] = HM_data[11][y];/*v_c*/
+					HM_TPC_array[3][y] = HM_data[0][y];/*i_a*/
+					HM_TPC_array[4][y] = HM_data[1][y];/*i_b*/
+					HM_TPC_array[5][y] = HM_data[2][y];/*i_c*/
 					if (ability_test != "None") {
 						HM_data[4][y] = HM_data[4][0];
 					}
-					HM_f_array[y] = HM_data[4][y];
-					HM_p_array[y] = HM_data[16][y];
-					HM_q_array[y] = HM_data[20][y];
-					HM_pf_array[y] = HM_data[28][y];
+					HM_TPC_array[6][y] = HM_data[4][y];/*f*/
+					HM_TPC_array[7][y] = HM_data[16][y];/*p*/
+					HM_TPC_array[8][y] = HM_data[20][y];/*q*/
+					HM_TPC_array[9][y] = HM_data[28][y];/*pf*/
 				}
-
 				for (int y = 0; y < 10; y++) {
 					if ((HM_data[0][y] != -1 or HM_data[3][y] != -1
 							or HM_data[4][y] != -1) and (first_run == false)) {
-//						std::cout << std::to_string(HM_time[y]) << std::endl;
-//						std::cout << HM_data[0][y] << std::endl;
-//						std::cout << HM_data[3][y] << std::endl;
-//						std::cout << HM_data[4][y] << std::endl;
-						HM_docs.push_back(
-								make_document(kvp("ID", HM_eid),
-										kvp("time",
-												bsoncxx::types::b_date {
-														std::chrono::system_clock::from_time_t(
-																HM_time[y])
-																+ std::chrono::milliseconds(
-																		y * 100) }),
-										kvp("i_a", HM_data[0][y]),
-										kvp("i_b", HM_data[1][y]),
-										kvp("i_c", HM_data[2][y]),
-										kvp("i", HM_data[3][y]),
-										kvp("f", HM_data[4][y]),
-										kvp("vl_ab", HM_data[5][y]),
-										kvp("vl_bc", HM_data[6][y]),
-										kvp("vl_ca", HM_data[7][y]),
-										kvp("vl", HM_data[8][y]),
-										kvp("v_a", HM_data[9][y]),
-										kvp("v_b", HM_data[10][y]),
-										kvp("v_c", HM_data[11][y]),
-										kvp("v", HM_data[12][y]),
-										kvp("p_a", HM_data[13][y]),
-										kvp("p_b", HM_data[14][y]),
-										kvp("p_c", HM_data[15][y]),
-										kvp("p", HM_data[16][y]),
-										kvp("q_a", HM_data[17][y]),
-										kvp("q_b", HM_data[18][y]),
-										kvp("q_c", HM_data[19][y]),
-										kvp("q", HM_data[20][y]),
-										kvp("s_a", HM_data[21][y]),
-										kvp("s_b", HM_data[22][y]),
-										kvp("s_c", HM_data[23][y]),
-										kvp("s", HM_data[24][y]),
-										kvp("pf_a", HM_data[25][y]),
-										kvp("pf_b", HM_data[26][y]),
-										kvp("pf_c", HM_data[27][y]),
-										kvp("pf", HM_data[28][y]),
-										kvp("imp_kwh", HM_data[29][y]),
-										kvp("exp_kwh", HM_data[30][y]),
-										kvp("tot_kwh", HM_data[31][y]),
-										kvp("net_kwh", HM_data[32][y]),
-										kvp("imp_kvarh", HM_data[33][y]),
-										kvp("exp_kvarh", HM_data[34][y]),
-										kvp("tot_kvarh", HM_data[35][y]),
-										kvp("net_kvarh", HM_data[36][y]),
-										kvp("imp_kvah", HM_data[37][y]),
-										kvp("exp_kvah", HM_data[38][y]),
-										kvp("tot_kvah", HM_data[39][y]),
-										kvp("net_kvah", HM_data[40][y])));
+						bsoncxx::builder::basic::document doc_one;
+						std::string keya;
+						doc_one.append(kvp("ID", HM_eid));
+						doc_one.append(kvp("time", bsoncxx::types::b_date {
+									std::chrono::system_clock::from_time_t(
+											HM_time[y])
+											+ std::chrono::milliseconds(
+													y * 100) }));
+						int count_point = 0;
+						while (modbus_device["meter"][Meter_mode]["Point"].GetKey(keya)){
+							doc_one.append(kvp(keya, HM_data[count_point][y]));
+							count_point++;
+						}
+						HM_docs.push_back(doc_one.extract());
 					} else {
 //						std::cout << std::to_string(HM_time[y]) << std::endl;
-						HM_docs.push_back(
-								make_document(kvp("ID", HM_eid),
-										kvp("time",
-												bsoncxx::types::b_date {
-														std::chrono::system_clock::from_time_t(
-																HM_time[y])
-																+ std::chrono::milliseconds(
-																		y * 100) }),
-										kvp("i_a", bsoncxx::types::b_null { }),
-										kvp("i_b", bsoncxx::types::b_null { }),
-										kvp("i_c", bsoncxx::types::b_null { }),
-										kvp("i", bsoncxx::types::b_null { }),
-										kvp("f", bsoncxx::types::b_null { }),
-										kvp("vl_ab",
-												bsoncxx::types::b_null { }),
-										kvp("vl_bc",
-												bsoncxx::types::b_null { }),
-										kvp("vl_ca",
-												bsoncxx::types::b_null { }),
-										kvp("vl", bsoncxx::types::b_null { }),
-										kvp("v_a", bsoncxx::types::b_null { }),
-										kvp("v_b", bsoncxx::types::b_null { }),
-										kvp("v_c", bsoncxx::types::b_null { }),
-										kvp("v", bsoncxx::types::b_null { }),
-										kvp("p_a", bsoncxx::types::b_null { }),
-										kvp("p_b", bsoncxx::types::b_null { }),
-										kvp("p_c", bsoncxx::types::b_null { }),
-										kvp("p", bsoncxx::types::b_null { }),
-										kvp("q_a", bsoncxx::types::b_null { }),
-										kvp("q_b", bsoncxx::types::b_null { }),
-										kvp("q_c", bsoncxx::types::b_null { }),
-										kvp("q", bsoncxx::types::b_null { }),
-										kvp("s_a", bsoncxx::types::b_null { }),
-										kvp("s_b", bsoncxx::types::b_null { }),
-										kvp("s_c", bsoncxx::types::b_null { }),
-										kvp("s", bsoncxx::types::b_null { }),
-										kvp("pf_a", bsoncxx::types::b_null { }),
-										kvp("pf_b", bsoncxx::types::b_null { }),
-										kvp("pf_c", bsoncxx::types::b_null { }),
-										kvp("pf", bsoncxx::types::b_null { }),
-										kvp("imp_kwh",
-												bsoncxx::types::b_null { }),
-										kvp("exp_kwh",
-												bsoncxx::types::b_null { }),
-										kvp("tot_kwh",
-												bsoncxx::types::b_null { }),
-										kvp("net_kwh",
-												bsoncxx::types::b_null { }),
-										kvp("imp_kvarh",
-												bsoncxx::types::b_null { }),
-										kvp("exp_kvarh",
-												bsoncxx::types::b_null { }),
-										kvp("tot_kvarh",
-												bsoncxx::types::b_null { }),
-										kvp("net_kvarh",
-												bsoncxx::types::b_null { }),
-										kvp("imp_kvah",
-												bsoncxx::types::b_null { }),
-										kvp("exp_kvah",
-												bsoncxx::types::b_null { }),
-										kvp("tot_kvah",
-												bsoncxx::types::b_null { }),
-										kvp("net_kvah",
-												bsoncxx::types::b_null { })));
+						bsoncxx::builder::basic::document doc_one;
+						std::string keya;
+						doc_one.append(kvp("ID", HM_eid));
+						doc_one.append(kvp("time", bsoncxx::types::b_date {
+									std::chrono::system_clock::from_time_t(
+											HM_time[y])
+											+ std::chrono::milliseconds(
+													y * 100) }));
+						int count_point = 0;
+						while (modbus_device["meter"][Meter_mode]["Point"].GetKey(keya)){
+							doc_one.append(kvp(keya, bsoncxx::types::b_null {}));
+							count_point++;
+						}
 					}
 				}
 				try {
@@ -2482,191 +2473,54 @@ void control_thread(bool &function_run, int &thread_count,
 				}
 				if ((HM_data[0][0] != -1 or HM_data[3][0] != -1
 						or HM_data[4][0] != -1) and (first_run == false)) {
-					HM_docs_one.push_back(
-							make_document(kvp("ID", HM_eid),
-									kvp("time",
-											[&HM_time_array](sub_array child) {
-												int y = 0;
-												for (const auto &element : HM_time_array) {
-													child.append(
-															bsoncxx::types::b_date {
-																	std::chrono::system_clock::from_time_t(
-																			element)
-																			+ std::chrono::milliseconds(
-																					y
-																							* 100) });
-													y++;
-												}
-											})
-									,
-									kvp("v_a",
-											[&HM_v_a_array](sub_array child) {
-												for (const double &element : HM_v_a_array) {
-													child.append(element);
-												}
-											})
-									,
-									kvp("v_b",
-											[&HM_v_b_array](sub_array child) {
-												for (const double &element : HM_v_b_array) {
-													child.append(element);
-												}
-											})
-									,
-									kvp("v_c",
-											[&HM_v_c_array](sub_array child) {
-												for (const double &element : HM_v_c_array) {
-													child.append(element);
-												}
-											})
-									,
-									kvp("i_a",
-											[&HM_i_a_array](sub_array child) {
-												for (const double &element : HM_i_a_array) {
-													child.append(element);
-												}
-											})
-									,
-									kvp("i_b",
-											[&HM_i_b_array](sub_array child) {
-												for (const double &element : HM_i_b_array) {
-													child.append(element);
-												}
-											})
-									,
-									kvp("i_c",
-											[&HM_i_c_array](sub_array child) {
-												for (const double &element : HM_i_c_array) {
-													child.append(element);
-												}
-											})
-									,
-									kvp("f",
-											[&HM_f_array](sub_array child) {
-												for (const double &element : HM_f_array) {
-													child.append(element);
-												}
-											})
-									,
-									kvp("p",
-											[&HM_p_array](sub_array child) {
-												for (const double &element : HM_p_array) {
-													child.append(element);
-												}
-											})
-									,
-									kvp("q",
-											[&HM_q_array](sub_array child) {
-												for (const double &element : HM_q_array) {
-													child.append(element);
-												}
-											})
-									,
-									kvp("pf",
-											[&HM_pf_array](sub_array child) {
-												for (const double &element : HM_pf_array) {
-													child.append(element);
-												}
-											})
-							));
+
+					bsoncxx::builder::basic::document doc_one;
+					std::string keya;
+					doc_one.append(kvp("ID", HM_eid));
+					for (int y = 0; y < 10; y++) {
+						doc_one.append(kvp("time", bsoncxx::types::b_date {
+									std::chrono::system_clock::from_time_t(
+											HM_time[y])
+											+ std::chrono::milliseconds(
+													y * 100) }));
+					}
+					for (int x = 0; x < 10; x++){/*point數*/
+						double point_array[10];
+						for (int y = 0;y <10 ;y++){/*每0.1s整理*/
+							point_array[y] = HM_TPC_array[x][y];
+						}
+						doc_one.append(kvp(point_name[x],
+								[&point_array](sub_array child) {
+								for (const double &element : point_array) {
+									child.append(element);
+								}
+						}));
+					}
+					HM_docs_one.push_back(doc_one.extract());
 				} else {
-					HM_docs_one.push_back(
-							make_document(kvp("ID", HM_eid),
-									kvp("time",
-											[&HM_time_array](sub_array child) {
-												int y = 0;
-												for (const auto &element : HM_time_array) {
-													child.append(
-															bsoncxx::types::b_date {
-																	std::chrono::system_clock::from_time_t(
-																			element)
-																			+ std::chrono::milliseconds(
-																					y
-																							* 100) });
-													y++;
-												}
-											})
-									,
-									kvp("v_a",
-											[&HM_v_a_array](sub_array child) {
-												for (const double &element : HM_v_a_array) {
-													child.append(
-															bsoncxx::types::b_null { });
-												}
-											})
-									,
-									kvp("v_b",
-											[&HM_v_b_array](sub_array child) {
-												for (const double &element : HM_v_b_array) {
-													child.append(
-															bsoncxx::types::b_null { });
-												}
-											})
-									,
-									kvp("v_c",
-											[&HM_v_c_array](sub_array child) {
-												for (const double &element : HM_v_c_array) {
-													child.append(
-															bsoncxx::types::b_null { });
-												}
-											})
-									,
-									kvp("i_a",
-											[&HM_i_a_array](sub_array child) {
-												for (const double &element : HM_i_a_array) {
-													child.append(
-															bsoncxx::types::b_null { });
-												}
-											})
-									,
-									kvp("i_b",
-											[&HM_i_b_array](sub_array child) {
-												for (const double &element : HM_i_b_array) {
-													child.append(
-															bsoncxx::types::b_null { });
-												}
-											})
-									,
-									kvp("i_c",
-											[&HM_i_c_array](sub_array child) {
-												for (const double &element : HM_i_c_array) {
-													child.append(
-															bsoncxx::types::b_null { });
-												}
-											})
-									,
-									kvp("f",
-											[&HM_f_array](sub_array child) {
-												for (const double &element : HM_f_array) {
-													child.append(
-															bsoncxx::types::b_null { });
-												}
-											})
-									,
-									kvp("p",
-											[&HM_p_array](sub_array child) {
-												for (const double &element : HM_p_array) {
-													child.append(
-															bsoncxx::types::b_null { });
-												}
-											})
-									,
-									kvp("q",
-											[&HM_q_array](sub_array child) {
-												for (const double &element : HM_q_array) {
-													child.append(
-															bsoncxx::types::b_null { });
-												}
-											})
-									,
-									kvp("pf",
-											[&HM_pf_array](sub_array child) {
-												for (const double &element : HM_pf_array) {
-													child.append(
-															bsoncxx::types::b_null { });
-												}
-											})
-							));
+					bsoncxx::builder::basic::document doc_one;
+					std::string keya;
+					doc_one.append(kvp("ID", HM_eid));
+					for (int y = 0; y < 10; y++) {
+						doc_one.append(kvp("time", bsoncxx::types::b_date {
+									std::chrono::system_clock::from_time_t(
+											HM_time[y])
+											+ std::chrono::milliseconds(
+													y * 100) }));
+					}
+					for (int x = 0; x < 10; x++){/*point數*/
+						double point_array[10];
+						for (int y = 0;y <10 ;y++){/*每0.1s整理*/
+							point_array[y] = HM_TPC_array[x][y];
+						}
+						doc_one.append(kvp(point_name[x],
+								[&point_array](sub_array child) {
+								for (const double &element : point_array) {
+									bsoncxx::types::b_null { };
+								}
+						}));
+					}
+					HM_docs_one.push_back(doc_one.extract());
 				}
 				try {
 					db["TPC"].insert_many(HM_docs_one);
@@ -2745,9 +2599,8 @@ void control_thread(bool &function_run, int &thread_count,
 					}
 				}
 			}
-//			std::cout << "lock_buffer_100ms :" <<lock_buffer_100ms<< std::endl;
-			if (lock_buffer_100ms == 0) {
-//			if (true) {
+			if (lock_buffer_100ms == 0) {/*每 1s*/
+//			if (true) {/*每 0.1s*/
 				PCS_ReadData_thread(pcsdata, LEDstate, set_source,
 						pcs_control_local, pcs_reset_local, pcs_reset,
 						pcs_control, control_flag, pcs_control_time_local,
@@ -2755,11 +2608,8 @@ void control_thread(bool &function_run, int &thread_count,
 						pcs_read_error_count, pcs_read_arr, pcs_ip, pcs_port,
 						pcs_id, pcs_read_ctx, pcs_read_ret,
 						modbus_link_pcs_read_flag, PCS_eid, db, db_local);
-
 			}
-
 			function_run = false;
-//			std::cout << "control_thread end " << std::endl;
 		} else { /*已經有程式在運行(上次超過0.1s)*/
 			std::cout << " control_thread over 0.1s " << std::endl;
 			for (int x = 0; x < 41; x++) {
@@ -2791,7 +2641,7 @@ void control_thread(bool &function_run, int &thread_count,
 	}
 	thread_count--;
 }
-void dllgc::AFC_run(bool &stopflag, int &error_code, std::string &ability_test,
+int dllgc::AFC_run(bool &stopflag, int &error_code, std::string &ability_test,
 		double &pcs_control_local, double &pcs_reset_local,
 		double &pcs_control_time_local, double *emsdata, double *mbmsdata,
 		double *HMdata, double *pcsdata, int *LEDstate, std::string MBMS_eid,
@@ -2880,7 +2730,6 @@ void dllgc::AFC_run(bool &stopflag, int &error_code, std::string &ability_test,
 		modbus_set_response_timeout(pcs_read_ctx, 0, 300000);
 		pcs_read_ret = modbus_connect(pcs_read_ctx);
 //		pcs_write_ret = modbus_connect(pcs_write_ctx);
-//		bool pcs_rdy = false;
 		/*High Meter modbus TCP 宣告*/
 		modbus_t *HM_ctx = modbus_new_tcp(HM_ip.c_str(), HM_port);
 		if (HM_ctx == NULL) {
@@ -3009,9 +2858,6 @@ void dllgc::AFC_run(bool &stopflag, int &error_code, std::string &ability_test,
 					pcs_control_time_local_buffer = pcs_control_time_local;
 					std::cout << "pcs_control_time_local change" << std::endl;
 				}
-//				std::cout << "pcs_connect_local :" <<pcs_connect_local<< std::endl;
-//				std::cout << "pcs_reset_local :" <<pcs_reset_local<< std::endl;
-//				std::cout << "pcs_control_time_local :" <<pcs_control_time_local<< std::endl;
 				if (PQ_p_ref_buffer != PQ_p_ref) {
 					t->PQ_p_ref = PQ_p_ref;
 					PQ_p_ref_buffer = PQ_p_ref;
@@ -3030,7 +2876,6 @@ void dllgc::AFC_run(bool &stopflag, int &error_code, std::string &ability_test,
 				Sleep(1000);
 				break;
 			}
-
 //			time_print_m("main running",1);
 			Sleep(100);
 		}
@@ -3060,5 +2905,6 @@ void dllgc::AFC_run(bool &stopflag, int &error_code, std::string &ability_test,
 	} catch (...) {
 		time_print_m("main error", 1);
 	}
+	return 0;
 }
 
